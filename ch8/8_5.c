@@ -84,3 +84,72 @@ void initAnimalName(){
                                     strAnimal[8]= "타조";
                                         strAnimal[9]= "호랑이";
 }
+
+
+void shuffleAnimal(){
+    for (int i =0;i<10;i++){
+        for(int j =0;j<2;j++){
+            int pos= getEmptyPosition();//카드 지도에서 빈 공간 찾기
+            int x= conv_pos_x(pos);//카드 번호를 x좌표로 변환
+            int y= conv_pos_y(pos);//카드 번호를 y좌표로 변환
+            arrayAnumal[x][y]= i;
+        }
+    }
+}
+int getEmptyPosition(){
+    //카드 지도에서 빈공간 찾기 함수
+    while (1){
+        int randPos= rand()%20;//
+        int x= conv_pos_x(randPos);
+        int y= conv_pos_y(randPos);
+        if (arrayAnumal[x][y]==-1){
+            return randPos;
+        }
+    }
+    return 0;
+}
+int conv_pos_x(int x){
+    return x/5;
+}
+
+int conv_pos_y(int y){
+    return y %5;
+}
+
+void printAminals(){
+    printf("\n=========동물 위치를 보여줍니다. =======\n\n");
+    for(int i = 0;i<4;i++){
+        for(int j =0;j<5;j++){
+            printf("%8s",strAnimal[arrayAnumal[i][j]]);
+        }
+        printf("\n");
+    }
+    printf("\n============================\n");
+}
+
+void printQuestion(){
+    printf("\n(문제)\n\n");
+    int seq= 0;
+    for (int i =0;i<4;i++){
+        for(int j = 0;j<5;j++){
+            if (checkAnimal[i][j]!=0){
+                printf("%8s",strAnimal[arrayAnumal[i][j]]);
+            }else{
+                printf("%8d",seq);
+            }
+            seq++;
+        }
+        printf("\n");
+    }
+}
+
+int foundAllAnimals(){
+    for(int i =0;i<4;i++){
+        for(int j=0;j<5;j++){
+            if(checkAnimal[i][j]==0){
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
