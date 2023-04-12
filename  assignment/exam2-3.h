@@ -1,7 +1,3 @@
 #include <stdio.h>
-
-int main(){
-
-
-    return 0;
-}
+#define ADD(x, y) ((x)+(y))
+#define SUB(x, y) ((x)-(y))
