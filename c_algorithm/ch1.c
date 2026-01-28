@@ -1,5 +1,9 @@
 #include <stdio.h>
-
+struct Point 
+    {
+        int x;
+        int y;
+    };
 int main(){
     // int* ptr;
 
@@ -13,6 +17,10 @@ int main(){
     int* ptr  = arr;
 
     printf("%s\n",ptr == arr? "true" : "false");
+   
+    struct Point MyPoint = {30,40};
 
+    printf("x : %d,y : %d\n",MyPoint.x,MyPoint.y);
+  
     return 0;
-}
+}  

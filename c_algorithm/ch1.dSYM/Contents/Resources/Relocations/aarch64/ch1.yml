@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/hangyeonghyeon/Desktop/c_study/c_algorithm/ch1'
+relocations:     []
+...
