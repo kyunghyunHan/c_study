@@ -4,6 +4,11 @@ struct Point
         int x;
         int y;
     };
+
+typedef struct tagPoiny{
+    int x;
+    int y;
+} Point;
 int main(){
     // int* ptr;
 
