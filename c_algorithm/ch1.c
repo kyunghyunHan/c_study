@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 struct Point 
     {
         int x;
@@ -9,6 +11,13 @@ typedef struct tagPoiny{
     int x;
     int y;
 } Point;
+
+typedef struct tagPoint2{
+    int x;
+    int y;
+}Point2;
+
+
 int main(){
     // int* ptr;
 
@@ -26,6 +35,9 @@ int main(){
     struct Point MyPoint = {30,40};
 
     printf("x : %d,y : %d\n",MyPoint.x,MyPoint.y);
-  
+   
+    Point2 *ptr2 = (Point2*)malloc(sizeof(Point2));
+
+    
     return 0;
 }  
