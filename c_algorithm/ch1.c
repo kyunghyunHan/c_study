@@ -38,6 +38,22 @@ int main(){
    
     Point2 *ptr2 = (Point2*)malloc(sizeof(Point2));
 
+
+    {   
+        //stack
+        int a =10;
+        int b = 10;
+        int c = 30;
+
+    }
+     //heap
+    typedef struct tpoint
+    {
+        int x;
+        int y;
+    } Point;
+    
+    Point *ptr = (Point*)malloc(sizeof(Point));
     
     return 0;
 }  
