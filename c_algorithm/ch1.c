@@ -54,6 +54,8 @@ int main(){
     } Point;
     
     Point *ptr = (Point*)malloc(sizeof(Point));
-    
+    //=>메모리 누수
+
+    free(ptr); //free로 정리
     return 0;
 }  
