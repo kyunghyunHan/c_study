@@ -2,3 +2,6 @@
 *.o
 *.exe
 a.out
+video.mov
+*.ppm
+/.vscode
