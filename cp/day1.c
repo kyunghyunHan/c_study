@@ -41,7 +41,7 @@ int main(){
     return 0;
 }
 #endif
-#if 1
+#if 0
 int main(){
     int a[10];
     int min, max;
@@ -83,3 +83,26 @@ int main(void)
     return 0;
 }
 #endif
+
+#if 0
+int main(void){
+    int a  = 5 , b = 5;
+    int pre ,post;
+
+    pre = (++a) * 3;
+    post = (b++) * 3;
+
+    printf("%d,%d\n",a,b);
+    printf("%d,%d",pre,post);
+    return 0;
+}
+#endif 
+
+#if 1
+int main(void){
+    float a = 3.75;
+    printf("a = %.1lf",a);
+    return 0;
+}
+
+#endif 
