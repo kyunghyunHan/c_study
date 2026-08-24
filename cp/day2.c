@@ -31,7 +31,7 @@ int main(void){
     return 0;
 }
 #endif
-
+#if 0
 int main(void){
     int a = 10, b = 15, total;
     double avg;
@@ -48,6 +48,44 @@ int main(void){
     printf ("두 정수의 값 : %d, %d\n",*pa , *pb);//10 15
     printf ("두 정수의 합 : %d\n",*pt);//25
     printf ("두 정수의 평균 : %.1lf\n",*pg);//0
-
+    const int *pa = &a;
     return 0;
 }
+#endif
+
+#if 0
+int main(void){
+    unsigned char a = -1;
+
+    signed char b  = -1;
+
+    printf("%d %d\n",a,b);
+
+    if (a>b)printf("1. a>b");
+    else if (a<b)printf("2. a<b");
+    else printf("3. a==b");
+    return 0;
+}
+#endif
+
+#if 0
+int main(void){
+
+int ary[3];
+int i ;
+*(ary + 0) = 10;
+*(ary+1) = 20;
+*(ary+2) = *(ary+0) + *(ary+1);
+
+for (int i  =0; i < 3;i++){
+    printf("%d\n",ary[i]);
+}
+}
+#endif
+
+#if 1
+int main(void){
+
+
+}
+#endif
