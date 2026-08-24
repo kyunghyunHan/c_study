@@ -85,7 +85,11 @@ for (int i  =0; i < 3;i++){
 
 #if 1
 int main(void){
+int a =10;
+int*  p = &a;
+int   *d= &a;
+printf("%d",*p);
 
-
+printf("%d",*d);
 }
 #endif
