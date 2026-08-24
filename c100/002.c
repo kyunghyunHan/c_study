@@ -16,7 +16,7 @@ int main(){
     printf("RAND_MAX = %x, %d\n",RAND_MAX,RAND_MAX);
 
     for(int i =0;i<10;i++){
-        printf("%6d",a[i]);
+        printf("%6d ",a[i]);
     }
     printf("\n");
     for(int i  =0;i<30;i++){
