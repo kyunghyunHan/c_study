@@ -477,7 +477,7 @@ int main(void){
 // }
 
 
-#if 1
+#if 0
 #include <stdio.h>
 
 int main(void) {
@@ -524,4 +524,28 @@ int main(void) {
 
 #endif 
 
-/* */
+/*
+a = 13, b = 13
+a = 14, b = 13;
+a = 15 +13 = ;
+a  =14 , b = 13
+b = 15+ 13
+28
+
+
+
+ */
+
+#if 1
+int main(void){
+
+    //1111 0000
+    //0000 1111
+    unsigned char a = 0xF0;
+    char b = 0xF0;
+    unsigned char c = 0x0F;
+    char d = 0x0F;
+
+    printf("%d %d %d %d\n",a==~c, a==~d, b==~c, b==~d);
+}
+#endif
