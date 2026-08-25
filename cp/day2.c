@@ -83,13 +83,68 @@ for (int i  =0; i < 3;i++){
 }
 #endif
 
-#if 1
+#if 0
+void print_ary(int *pa);
 int main(void){
-int a =10;
-int*  p = &a;
-int   *d= &a;
-printf("%d",*p);
-
-printf("%d",*d);
+  int ary[5] = {10,20,30,40,50};
+  print_ary(ary);
+  return 0;
 }
+
+void print_ary(int *pa){
+    int i ;
+    for (i = 0;i<5;i++){
+        printf("%d",pa[i]);
+    }
+
+}
+
+
 #endif
+
+#if 0
+int main(void){
+    int num,grade;
+    printf("학번 입력 : ");
+    scanf("%d",&num);
+    getchar();
+    printf("학점 입력 : ");
+    grade = getchar();
+    printf("학번 : %d, 학점 : %C",num,grade);
+    return 0;
+}
+#endif 
+
+#if 0
+void print_str(char ** pps,int cnt);
+
+int main(void){
+    char *ptr_ary[] = {"eagle","tiger","lion","squirrel"};
+    int count ;
+
+    count = sizeof(ptr_ary)/sizeof(ptr_ary[0]);
+    print_str(ptr_ary,count);
+
+
+    return 0;
+}
+void print_str(char **pps,int cnt){
+    int i ;
+    for (i = 0;i<cnt;i++){
+        printf("%s\n",pps[i]);
+    }
+}
+
+#endif
+
+#if 1
+
+int main(void){
+    int ary[5];
+    printf(" ary의값 : %u\t",ary);
+    printf(" ary의 주소 : %u\n",&ary);
+    printf(" ary + 1  : %u\t",ary+1);
+    printf(" &ary + 1 : %u\n",&ary+1);
+
+}
+#endif 
