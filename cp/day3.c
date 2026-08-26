@@ -24,11 +24,22 @@
 // }
 // #endif
 
-#if 1
+#if 0
 int main(){
 double * (*a[5])(int *);
 printf("%d", sizeof(a));
 
 return 0;
 }
+#endif
+
+#if 1
+
+int main(){
+    int a = 10;
+int b = 20;
+
+    printf("%d", (a > b) ? a : b);
+}
+
 #endif
