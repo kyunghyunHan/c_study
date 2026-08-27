@@ -1,6 +1,6 @@
 /*
 kernel
-
+qumu  = 가상 하드웨어
  */
 
 void kmain(void){
