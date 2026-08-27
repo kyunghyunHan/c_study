@@ -63,33 +63,114 @@ int main(){
 
 }
 
-
-
 #endif
 
-#if 1
-// int main(){
-//     int n = 65;
-//      printf("%d\n",(n%2==0)?2:(n%3==0)?3:(n%5==0)?5:0);
-//     return 0;
-// }
-#endif 
-
-#if 1
+#if 0
 int main(){
-
-    int score;
-    scanf("%d",&score);
-    
-    if (score>=70){
-        printf("합격입니다.\n");
-    }else if(score>=60 && score<70){
-        printf("재시험보세요.\n");
-    }else{
-         printf("불합격입니다.\n");
-    }
-    
-    
+    int n = 65;
+     printf("%d\n",(n%2==0)?2:(n%3==0)?3:(n%5==0)?5:0);
     return 0;
 }
 #endif
+
+#if 0
+int main(){
+    int score;
+    scanf("%d",&score);
+    char *c[]= {"불합격입니다.","재시험입니다.","합격입니다."};
+    printf("%s\n", c[(score >= 60) + (score >= 70)]);
+    return 0;
+}
+#endif
+
+#if 0
+int main()
+{
+    int score;
+    char ans;
+    scanf("%d", &score);
+    // if (score >= 90)ㅍ
+    // {
+    //     ans = 'A';
+    // }
+    // else if (score >= 89)
+    // {
+    //     ans = 'B';
+    // }
+    // else if (score >= 79)
+    // {
+    //     ans = 'C';
+    // }
+    // else if (score >= 69)
+    // {
+    //     ans = 'D';
+    // }
+    // else
+    // {
+    //     ans = 'F';
+    // }
+    
+    switch (score / 10)
+    {
+    case (10):
+    case (9):
+        ans = 'A';
+        break;
+    case (8):
+        ans = 'B';
+        break;
+    case (7):
+        ans = 'C';
+        break;
+    case (6):
+        ans = 'D';
+        break;ㅈ
+    default:
+        ans = 'F';
+        break;
+    }
+    printf("%c", ans);
+}
+#endif
+
+#if 0
+int main(){
+    int a  = 65;
+    char arr[] = "FFFFFFDCBAA";
+    printf("%c", arr[a / 10]);
+}
+#endif
+
+#if 0
+int main(void) { //while
+
+    int num;
+    scanf("%d", &num);
+
+    while (num > 10) {
+        scanf("%d", &num);
+    }
+
+    printf("%d", num);
+}
+#endif
+
+#if 0
+int main(void) { // do-while
+
+    int num;
+    do {
+        scanf("%d\n", &num);
+    }while (num > 10);
+
+    printf("%d\n", num);
+
+    int num2;
+    while (num2 > 10) {
+        scanf("%d", &num2);
+    }
+
+    printf("%d\n", num2);
+}
+#endif
+
