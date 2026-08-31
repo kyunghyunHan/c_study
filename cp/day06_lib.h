@@ -3,6 +3,11 @@ int a ; //잘못댄 내용
 - (1)초기화 없으면 뱐수 중복이 있는 것을 발변하기 어려움
 - (2)변수 선언은 c 파일에 하럿
 - (3)
-
-
  */
+
+#ifndef DAY06_LIB_H
+#define DAY06_LIB_H
+
+extern int m;
+
+#endif
