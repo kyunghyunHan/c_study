@@ -7,7 +7,19 @@ int a ; //잘못댄 내용
 
 #ifndef DAY06_LIB_H
 #define DAY06_LIB_H
-
+#include <stddef.h>
 extern int m;
+void swap(int *ap, int *bp);
 
+void scanf_ary(int *ary, size_t len);
+void print_ary(int *ary, size_t len);
+int findmax_ary(int *ary, size_t len);
+int findmin_ary(int *ary, size_t len);
+size_t findmax_idx(int *ary, size_t len);
+size_t findmin_idx(int *ary, size_t len);
+int sum_ary(int *ary, size_t len);
+int avg_ary(int *ary, size_t len);
+void find_min_max(int * ary , size_t n);
+double var_ary(int *ary, size_t len);
+void simple_sort(int *ary, size_t n );
 #endif
