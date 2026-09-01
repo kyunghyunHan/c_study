@@ -145,9 +145,22 @@ void simple_sort(int *ary, size_t len ){
 }
 //getchar 함수를 사용하여 n 글자 미만의 글자를 입력받는 합수를 작성한다
 //n글자 이상의 글자를입력해도 오류없이 n-1개 글자를 입력받는다
-// void my_gets(char *ary , int n){
 
-// }
+void my_gets(char *ary, int n)
+{
+    int s;
+    int i = 0;
+
+    if (ary == NULL || n <= 0)
+        return;
+
+    while ((s = getchar()) != '\n') {
+        if (i < n - 1){
+            ary[i++] = (char)s;
+        }
+    }
+    ary[i] = '\0';
+}
 
 //str배얄의 내용중 소문자 를 대물자로 수정하는 함수를 작성한다
 //str에전달받은 값을 그대로 반환
