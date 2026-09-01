@@ -21,5 +21,7 @@ int sum_ary(int *ary, size_t len);
 int avg_ary(int *ary, size_t len);
 void find_min_max(int * ary , size_t n);
 double var_ary(int *ary, size_t len);
+double std_ary(int *ary, size_t len);
 void simple_sort(int *ary, size_t n );
+char * _to_upper(char*str);
 #endif

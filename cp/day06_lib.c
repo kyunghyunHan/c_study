@@ -129,8 +129,8 @@ double var_ary(int *ary, size_t len){
 }
 
 //표준편차 = 분산의 양의 제곱근 
-double std_ary(int * ary , size_t len){
-
+double std_ary(int *ary, size_t len){
+    return sqrt(var_ary(ary, len));
 }
 void simple_sort(int *ary, size_t len ){
     for (size_t i = 0; i<len-1;i++){
@@ -142,4 +142,23 @@ void simple_sort(int *ary, size_t len ){
              }
         }
     }
+}
+//getchar 함수를 사용하여 n 글자 미만의 글자를 입력받는 합수를 작성한다
+//n글자 이상의 글자를입력해도 오류없이 n-1개 글자를 입력받는다
+// void my_gets(char *ary , int n){
+
+// }
+
+//str배얄의 내용중 소문자 를 대물자로 수정하는 함수를 작성한다
+//str에전달받은 값을 그대로 반환
+char * _to_upper(char*str){
+  char *start = str;
+
+  while (*str != '\0'){
+    if (*str >= 'a' && *str <= 'z'){
+        *str -= 'a' - 'A';
+    }
+    str++;
+  }
+  return start;
 }
