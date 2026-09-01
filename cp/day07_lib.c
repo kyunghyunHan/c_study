@@ -45,6 +45,20 @@ int strcmp(const char *s1 , const char *s2){
 int intcmp(const int *a, const int *b){
     return *a - *b;
 }
-// char * strcpy(){
-//     return 'a';
+// char * strcat(char *s , const char append){
 // }
+
+int factorial(int n){
+    //캐싱을 위한 정적 지열 배열
+    static int memo[100] = {0};
+    if(n==0 || n==1)return 1;
+    if (memo[n]!=0)return memo[n];
+    memo[n]  = n*factorial(n-1);
+    return memo[n];
+}
+
+/*2차원배열 포인트 
+in
+
+
+ */
