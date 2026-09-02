@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>배열과 포인터 이해하기</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f4f6f9;
+    color: #222;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  h1 {
+    font-size: 24px;
+    text-align: center;
+    color: #1a365d;
+    margin-bottom: 4px;
+  }
+  .sub { text-align: center; color: #666; font-size: 14px; margin-bottom: 24px; }
+
+  /* 탭 */
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+  .tab-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    background: #d9e2ec;
+    color: #334;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .tab-btn:hover { background: #c3d3e6; }
+  .tab-btn.active { background: #2b6cb0; color: #fff; }
+
+  .panel { display: none; }
+  .panel.active { display: block; animation: fade .25s; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px);} to {opacity:1; transform:none;} }
+
+  .decl {
+    background: #1a202c;
+    color: #7ee787;
+    font-family: 'Courier New', monospace;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  /* 메모리 시각화 */
+  .mem-title { font-size: 14px; color: #555; margin: 10px 0 6px; }
+  .mem {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    background: #fff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 8px;
+  }
+  .row-group { display: flex; flex-direction: column; gap: 2px; margin: 0 2px 6px; }
+  .row-label { font-size: 11px; color: #888; text-align: center; }
+  .cells { display: flex; gap: 3px; }
+  .block-wrap { border: 2px dashed transparent; border-radius: 8px; padding: 4px; }
+  .cell {
+    width: 60px;
+    text-align: center;
+    border: 2px solid #cbd5e0;
+    border-radius: 6px;
+    background: #f7fafc;
+    padding: 4px 2px;
+    transition: all .2s;
+  }
+  .cell .val { font-size: 16px; font-weight: bold; font-family: 'Courier New', monospace; }
+  .cell .addr { font-size: 10px; color: #999; font-family: 'Courier New', monospace; }
+  .cell.hl { background: #fff3cd; border-color: #f0a500; box-shadow: 0 0 0 3px rgba(240,165,0,.25); transform: translateY(-3px); }
+  .cell.point-target, .cchar.point-target { background: #d4edda; border-color: #28a745; box-shadow: 0 0 0 3px rgba(40,167,69,.3); transform: translateY(-3px); }
+  .block-wrap.hl-block { border-color: #2b6cb0; background: rgba(43,108,176,.06); }
+
+  /* char* 문자열 표현 */
+  .str-cells { display:flex; gap:2px; }
+  .cchar {
+    width: 40px; height:44px; display:flex; align-items:center; justify-content:center;
+    text-align:center; border:2px solid #cbd5e0; border-radius:6px;
+    background:#f7fafc; font-family:'Courier New',monospace; font-weight:bold; font-size:18px;
+    transition: all .2s;
+  }
+  .cchar.hl { background:#fff3cd; border-color:#f0a500; }
+  .str-line { display:flex; align-items:center; gap:8px; margin:4px 0; }
+  .ptr-box {
+    width:60px; text-align:center; border:2px solid #cbd5e0; border-radius:6px;
+    background:#eef2f7; padding:4px 2px; font-family:'Courier New',monospace; font-size:12px;
+    transition: all .2s;
+  }
+  .ptr-box.hl { background:#fff3cd; border-color:#f0a500; box-shadow:0 0 0 3px rgba(240,165,0,.25);}
+  .arrow { color:#2b6cb0; font-size:18px; }
+
+  /* 표현식 버튼 */
+  .expr-title { font-size:15px; font-weight:bold; color:#2b6cb0; margin:20px 0 8px; }
+  .exprs { display:flex; flex-wrap:wrap; gap:8px; }
+  .expr-btn {
+    font-family:'Courier New', monospace;
+    font-size:15px;
+    padding:8px 14px;
+    border:2px solid #2b6cb0;
+    background:#fff;
+    color:#2b6cb0;
+    border-radius:6px;
+    cursor:pointer;
+    transition: all .15s;
+  }
+  .expr-btn:hover { background:#eaf1fa; }
+  .expr-btn.active { background:#2b6cb0; color:#fff; }
+
+  /* 설명 패널 */
+  .info {
+    margin-top:16px;
+    background:#fff;
+    border:1px solid #dde3ea;
+    border-left:5px solid #2b6cb0;
+    border-radius:8px;
+    padding:16px 18px;
+    min-height:80px;
+  }
+  .info .code { font-family:'Courier New',monospace; font-size:18px; font-weight:bold; color:#1a365d; }
+  .info .type { display:inline-block; background:#2b6cb0; color:#fff; font-size:13px;
+    padding:2px 10px; border-radius:12px; margin-left:8px; font-family:'Courier New',monospace;}
+  .info .desc { margin-top:10px; color:#333; }
+  .info .eval { margin-top:8px; font-family:'Courier New',monospace; font-size:14px; color:#c0392b; }
+  .info .placeholder { color:#999; }
+
+  .legend { font-size:12px; color:#777; margin-top:10px; }
+  .legend span { display:inline-block; margin-right:14px; }
+  .dot { display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:middle; margin-right:4px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎯 배열과 포인터, 무엇을 가리킬까?</h1>
+  <div class="sub">배열 이름과 표현식을 클릭하면 메모리에서 가리키는 대상이 하이라이트됩니다</div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="d1">1차원 int</button>
+    <button class="tab-btn" data-tab="d2">2차원 int</button>
+    <button class="tab-btn" data-tab="d3">3차원 int</button>
+    <button class="tab-btn" data-tab="cp">char* 배열</button>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot" style="background:#fff3cd;border:2px solid #f0a500;"></span><b>주황</b> = 이 표현식은 <b>주소(포인터)</b> → 이 원소를 <b>가리킴</b></span>
+    <span><span class="dot" style="background:#d4edda;border:2px solid #28a745;"></span><b>초록</b> = 이 표현식은 <b>값</b> → 이 원소의 값</span>
+    <span><span class="dot" style="background:rgba(43,108,176,.06);border:2px dashed #2b6cb0;"></span><b>파란 점선</b> = 포인터가 가리키는 <b>블록(행/면)</b></span>
+  </div>
+
+  <!-- ================= 1차원 ================= -->
+  <div class="panel active" id="d1">
+    <div class="decl">int a[5] = {10, 20, 30, 40, 50};  <span style="color:#888;">// int = 4바이트, 시작주소 0x1000 가정</span></div>
+    <div class="mem-title">메모리 (연속된 정수 5개)</div>
+    <div class="mem" id="mem-d1"></div>
+    <div class="expr-title">아래 표현식을 눌러보세요</div>
+    <div class="exprs" id="exprs-d1"></div>
+    <div class="info" id="info-d1"><span class="placeholder">표현식을 클릭하면 여기에 타입과 설명이 표시됩니다.</span></div>
+  </div>
+
+  <!-- ================= 2차원 ================= -->
+  <div class="panel" id="d2">
+    <div class="decl">int a[2][3] = {{1,2,3},{4,5,6}};  <span style="color:#888;">// 시작주소 0x2000 가정</span></div>
+    <div class="mem-title">메모리 (행 단위로 연속 배치)</div>
+    <div class="mem" id="mem-d2"></div>
+    <div class="expr-title">아래 표현식을 눌러보세요</div>
+    <div class="exprs" id="exprs-d2"></div>
+    <div class="info" id="info-d2"><span class="placeholder">표현식을 클릭하면 여기에 타입과 설명이 표시됩니다.</span></div>
+  </div>
+
+  <!-- ================= 3차원 ================= -->
+  <div class="panel" id="d3">
+    <div class="decl">int a[2][2][3];  <span style="color:#888;">// 면(2) × 행(2) × 열(3), 시작주소 0x3000 가정</span></div>
+    <div class="mem-title">메모리 (면 → 행 → 열 순서로 연속 배치)</div>
+    <div class="mem" id="mem-d3"></div>
+    <div class="expr-title">아래 표현식을 눌러보세요</div>
+    <div class="exprs" id="exprs-d3"></div>
+    <div class="info" id="info-d3"><span class="placeholder">표현식을 클릭하면 여기에 타입과 설명이 표시됩니다.</span></div>
+  </div>
+
+  <!-- ================= char* ================= -->
+  <div class="panel" id="cp">
+    <div class="decl">char *s[3] = {"cat", "dog", "bird"};  <span style="color:#888;">// 포인터 배열(주소를 담는 배열)</span></div>
+    <div class="mem-title">포인터 배열 s (각 칸은 문자열의 시작 주소를 저장)</div>
+    <div class="mem" id="mem-cp-ptr" style="justify-content:flex-start;"></div>
+    <div class="mem-title">각 포인터가 가리키는 실제 문자열(문자 배열)</div>
+    <div class="mem" id="mem-cp-str" style="flex-direction:column; align-items:flex-start;"></div>
+    <div class="expr-title">아래 표현식을 눌러보세요</div>
+    <div class="exprs" id="exprs-cp"></div>
+    <div class="info" id="info-cp"><span class="placeholder">표현식을 클릭하면 여기에 타입과 설명이 표시됩니다.</span></div>
+  </div>
+</div>
+
+<script>
+/* ---------- 탭 전환 ---------- */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  };
+});
+
+/* 하이라이트 초기화 */
+function clearHL(scope){
+  scope.querySelectorAll('.cell,.cchar,.ptr-box').forEach(c=>{c.classList.remove('hl','point-target');});
+  scope.querySelectorAll('.block-wrap').forEach(b=>b.classList.remove('hl-block'));
+}
+function hex(n){ return '0x'+n.toString(16).toUpperCase(); }
+
+/* ============================================================
+   1차원 int a[5]
+   ============================================================ */
+(function(){
+  const base=0x1000, vals=[10,20,30,40,50];
+  const mem=document.getElementById('mem-d1');
+  vals.forEach((v,i)=>{
+    const c=document.createElement('div');
+    c.className='cell'; c.id='d1-'+i;
+    c.innerHTML=`<div class="val">${v}</div><div class="addr">${hex(base+i*4)}</div>`;
+    const w=document.createElement('div'); w.className='row-group';
+    w.innerHTML=`<div class="row-label">a[${i}]</div>`;
+    const cw=document.createElement('div'); cw.className='cells'; cw.appendChild(c);
+    w.appendChild(cw); mem.appendChild(w);
+  });
+
+  const E=[
+    {code:'a', type:'int *', desc:'배열 이름 a는 첫 원소 a[0]의 주소로 취급됩니다. 즉 int형을 가리키는 포인터입니다.', eval:`값 = ${hex(base)} (a[0]의 주소)`, cells:[0]},
+    {code:'a + 1', type:'int *', desc:'포인터 산술: int(4바이트) 단위로 이동하므로 a[1]을 가리킵니다.', eval:`값 = ${hex(base+4)} (a[1]의 주소)`, cells:[1]},
+    {code:'*a', type:'int', desc:'a가 가리키는 값을 꺼냅니다. 즉 a[0]의 값입니다.', eval:'값 = 10', cells:[0], target:true},
+    {code:'*(a + 2)', type:'int', desc:'a[2]와 완전히 같은 표현입니다. a[i] ≡ *(a+i).', eval:'값 = 30', cells:[2], target:true},
+    {code:'a[3]', type:'int', desc:'인덱스 접근. 내부적으로 *(a+3)으로 계산됩니다.', eval:'값 = 40', cells:[3], target:true},
+    {code:'&a', type:'int (*)[5]', desc:'배열 전체를 가리키는 포인터. 값은 a와 같지만 타입이 다릅니다. &a+1은 20바이트(배열 전체 크기)만큼 점프합니다.', eval:`값 = ${hex(base)} (같은 위치, 다른 타입)`, cells:[0,1,2,3,4], block:true},
+    {code:'&a[0]', type:'int *', desc:'a[0] 원소의 주소. 결국 a와 값이 같습니다.', eval:`값 = ${hex(base)}`, cells:[0]},
+  ];
+  buildExprs('d1', E);
+})();
+
+/* ============================================================
+   2차원 int a[2][3]
+   ============================================================ */
+(function(){
+  const base=0x2000, vals=[[1,2,3],[4,5,6]];
+  const mem=document.getElementById('mem-d2');
+  let idx=0;
+  vals.forEach((row,r)=>{
+    const rg=document.createElement('div'); rg.className='row-group';
+    rg.innerHTML=`<div class="row-label">a[${r}]  (행)</div>`;
+    const bw=document.createElement('div'); bw.className='block-wrap'; bw.id='d2-block-'+r;
+    const cw=document.createElement('div'); cw.className='cells';
+    row.forEach((v,c)=>{
+      const cell=document.createElement('div');
+      cell.className='cell'; cell.id=`d2-${r}-${c}`;
+      cell.innerHTML=`<div class="val">${v}</div><div class="addr">${hex(base+idx*4)}</div>`;
+      cw.appendChild(cell); idx++;
+    });
+    bw.appendChild(cw); rg.appendChild(bw); mem.appendChild(rg);
+  });
+
+  const E=[
+    {code:'a', type:'int (*)[3]', desc:'2차원 배열 이름 a는 "첫 번째 행 a[0]"을 가리키는 포인터입니다. a[0]은 int[3]이므로 a의 타입은 int(*)[3]. a+1은 12바이트(행 하나=int 3개)만큼 이동합니다.', eval:`값 = ${hex(base)} (a[0] 행의 시작)`, cells:['0-0','0-1','0-2'], block:'0'},
+    {code:'a + 1', type:'int (*)[3]', desc:'행 단위로 이동 → 두 번째 행 a[1]을 가리킵니다.', eval:`값 = ${hex(base+12)} (a[1] 행의 시작)`, cells:['1-0','1-1','1-2'], block:'1'},
+    {code:'a[0]  ( = *a )', type:'int *', desc:'a[0]은 첫 행(int[3])이며, 사용 시 첫 원소 a[0][0]의 주소인 int*로 변합니다.', eval:`값 = ${hex(base)} (a[0][0]의 주소)`, cells:['0-0']},
+    {code:'a[1]', type:'int *', desc:'두 번째 행을 가리키는 int*. 즉 a[1][0]의 주소.', eval:`값 = ${hex(base+12)}`, cells:['1-0']},
+    {code:'*a', type:'int *', desc:'*a는 a[0]과 같습니다. 행을 한 겹 벗겨 int*가 됩니다. (주의: 아직 정수 값이 아님!)', eval:`값 = ${hex(base)}`, cells:['0-0']},
+    {code:'a[1][2]', type:'int', desc:'실제 정수 값. *(*(a+1)+2)로 계산됩니다.', eval:'값 = 6', cells:['1-2'], target:true},
+    {code:'**a', type:'int', desc:'두 번 벗겨야 비로소 정수. a[0][0]과 같습니다.', eval:'값 = 1', cells:['0-0'], target:true},
+    {code:'*(*(a+1)+2)', type:'int', desc:'a[1][2]의 완전한 풀이 형태. 행 이동 → 열 이동 → 값 참조.', eval:'값 = 6', cells:['1-2'], target:true},
+  ];
+  buildExprs('d2', E, '-');
+})();
+
+/* ============================================================
+   3차원 int a[2][2][3]
+   ============================================================ */
+(function(){
+  const base=0x3000;
+  const vals=[[[1,2,3],[4,5,6]],[[7,8,9],[10,11,12]]];
+  const mem=document.getElementById('mem-d3');
+  let idx=0;
+  vals.forEach((face,f)=>{
+    const faceWrap=document.createElement('div');
+    faceWrap.style.cssText='border:2px dashed #b0bac6;border-radius:10px;padding:8px;margin:4px;';
+    faceWrap.id='d3-face-'+f;
+    const flabel=document.createElement('div');
+    flabel.className='row-label'; flabel.style.fontWeight='bold';
+    flabel.textContent=`a[${f}]  (면 / 2×3 블록)`;
+    faceWrap.appendChild(flabel);
+    face.forEach((row,r)=>{
+      const rg=document.createElement('div'); rg.className='row-group';
+      rg.innerHTML=`<div class="row-label">a[${f}][${r}]</div>`;
+      const cw=document.createElement('div'); cw.className='cells';
+      row.forEach((v,c)=>{
+        const cell=document.createElement('div');
+        cell.className='cell'; cell.id=`d3-${f}-${r}-${c}`;
+        cell.style.width='52px';
+        cell.innerHTML=`<div class="val">${v}</div><div class="addr">${hex(base+idx*4)}</div>`;
+        cw.appendChild(cell); idx++;
+      });
+      rg.appendChild(cw); faceWrap.appendChild(rg);
+    });
+    mem.appendChild(faceWrap);
+  });
+
+  const allFace0=['0-0-0','0-0-1','0-0-2','0-1-0','0-1-1','0-1-2'];
+  const E=[
+    {code:'a', type:'int (*)[2][3]', desc:'3차원 배열 이름 a는 "첫 번째 면 a[0]"(2×3 블록)을 가리킵니다. a+1은 24바이트(면 하나=int 6개)만큼 이동합니다.', eval:`값 = ${hex(base)} (a[0] 면의 시작)`, cells:allFace0, face:'0'},
+    {code:'a[0]  ( = *a )', type:'int (*)[3]', desc:'면을 한 겹 벗기면 "행을 가리키는 포인터". a[0]은 첫 면의 첫 행 a[0][0]을 가리킵니다.', eval:`값 = ${hex(base)}`, cells:['0-0-0','0-0-1','0-0-2']},
+    {code:'a[1]', type:'int (*)[3]', desc:'두 번째 면의 첫 행을 가리키는 int(*)[3].', eval:`값 = ${hex(base+24)}`, cells:['1-0-0','1-0-1','1-0-2'], face:'1'},
+    {code:'a[0][1]  ( = *(*a+1) )', type:'int *', desc:'면·행을 벗기면 열을 가리키는 int*. 첫 면의 둘째 행 시작 원소를 가리킵니다.', eval:`값 = ${hex(base+12)}`, cells:['0-1-0']},
+    {code:'a[1][1][2]', type:'int', desc:'세 번 벗겨야 정수. *(*(*(a+1)+1)+2)로 계산됩니다.', eval:'값 = 12', cells:['1-1-2'], target:true},
+    {code:'***a', type:'int', desc:'세 번 역참조 → a[0][0][0]. 3차원은 별 세 개를 붙여야 값이 나옵니다.', eval:'값 = 1', cells:['0-0-0'], target:true},
+  ];
+  buildExprs('d3', E, '-', true);
+})();
+
+/* ============================================================
+   char *s[3] = {"cat","dog","bird"}
+   ============================================================ */
+(function(){
+  const base=0x4000; // 포인터 배열 s의 시작
+  const strBase=[0x5000,0x5100,0x5200];
+  const strs=['cat','dog','bird'];
+  const ptrMem=document.getElementById('mem-cp-ptr');
+  const strMem=document.getElementById('mem-cp-str');
+
+  // 포인터 배열
+  strs.forEach((str,i)=>{
+    const rg=document.createElement('div'); rg.className='row-group';
+    rg.innerHTML=`<div class="row-label">s[${i}]</div>`;
+    const cell=document.createElement('div'); cell.className='ptr-box'; cell.id='cp-ptr-'+i;
+    cell.innerHTML=`${hex(strBase[i])}<div class="addr" style="color:#999;">@${hex(base+i*8)}</div>`;
+    rg.appendChild(cell); ptrMem.appendChild(rg);
+  });
+
+  // 문자열 실체
+  strs.forEach((str,i)=>{
+    const line=document.createElement('div'); line.className='str-line';
+    const tag=document.createElement('span');
+    tag.style.cssText='font-family:monospace;color:#555;width:150px;line-height:1.35;';
+    tag.innerHTML=`s[${i}] &rarr; "${str}"<br><span style="color:#aaa;font-size:11px;">시작 ${hex(strBase[i])}</span>`;
+    line.appendChild(tag);
+    const cw=document.createElement('div'); cw.className='str-cells';
+    const chars=str.split('').concat(['\\0']);
+    chars.forEach((ch,j)=>{
+      const cc=document.createElement('div'); cc.className='cchar'; cc.id=`cp-str-${i}-${j}`;
+      cc.textContent=ch;
+      cw.appendChild(cc);
+    });
+    line.appendChild(cw); strMem.appendChild(line);
+  });
+
+  const E=[
+    {code:'s', type:'char **', desc:'포인터 배열의 이름 s는 첫 원소 s[0]의 주소를 가리킵니다. s[0]이 char*이므로 s는 char**. (s는 위쪽 포인터 칸 s[0]을 가리킴)', eval:`값 = ${hex(base)} (s[0]이 있는 곳)`, ptr:[0]},
+    {code:'s[0]  ( = *s )', type:'char *', desc:`문자열 "cat"의 시작 주소를 담은 포인터. 첫 글자 'c'를 가리킵니다.`, eval:`값 = ${hex(strBase[0])}`, chars:['0-0']},
+    {code:'s[2]', type:'char *', desc:'"bird"의 시작 주소. s[2]는 세 번째 포인터입니다.', eval:`값 = ${hex(strBase[2])}`, chars:['2-0']},
+    {code:'*s[0]  ( = s[0][0] )', type:'char', desc:`s[0]이 가리키는 첫 글자. 즉 문자 'c'.`, eval:"값 = 'c'", chars:['0-0'], target:true},
+    {code:'s[2][1]', type:'char', desc:`"bird"의 두 번째 글자 → 'i'. s[i][j]는 i번째 문자열의 j번째 글자.`, eval:"값 = 'i'", chars:['2-1'], target:true},
+    {code:'*(s + 1)', type:'char *', desc:'s[1]과 같습니다 → "dog"의 시작 주소.', eval:`값 = ${hex(strBase[1])}`, chars:['1-0']},
+    {code:'**s', type:'char', desc:`두 번 벗기면 첫 문자열의 첫 글자 → 'c'.`, eval:"값 = 'c'", chars:['0-0'], target:true},
+  ];
+
+  const box=document.getElementById('exprs-cp');
+  const info=document.getElementById('info-cp');
+  const scope=document.getElementById('cp');
+  E.forEach(e=>{
+    const b=document.createElement('button'); b.className='expr-btn'; b.textContent=e.code;
+    b.onclick=()=>{
+      clearHL(scope);
+      box.querySelectorAll('.expr-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      (e.ptr||[]).forEach(i=>document.getElementById('cp-ptr-'+i).classList.add('hl'));
+      (e.chars||[]).forEach(id=>{
+        const el=document.getElementById('cp-str-'+id);
+        if(el) el.classList.add(e.target?'point-target':'hl');
+      });
+      info.innerHTML=`<span class="code">${e.code.split(' ')[0]}</span><span class="type">${e.type}</span>
+        <div class="desc">${e.desc}</div><div class="eval">${e.eval}</div>`;
+    };
+    box.appendChild(b);
+  });
+})();
+
+/* ---------- 공통 표현식 빌더 (int 배열용) ---------- */
+function buildExprs(tab, E, sep='', is3d=false){
+  const box=document.getElementById('exprs-'+tab);
+  const info=document.getElementById('info-'+tab);
+  const scope=document.getElementById(tab);
+  E.forEach(e=>{
+    const b=document.createElement('button'); b.className='expr-btn'; b.textContent=e.code;
+    b.onclick=()=>{
+      clearHL(scope);
+      box.querySelectorAll('.expr-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      // 셀 하이라이트
+      (e.cells||[]).forEach(id=>{
+        const el=document.getElementById(tab+'-'+id);
+        if(el) el.classList.add(e.target?'point-target':'hl');
+      });
+      // 블록(행) 하이라이트
+      if(e.block!==undefined){
+        const bl=document.getElementById('d2-block-'+e.block);
+        if(bl) bl.classList.add('hl-block');
+      }
+      // 면 하이라이트 (3d)
+      if(e.face!==undefined){
+        const fc=document.getElementById('d3-face-'+e.face);
+        if(fc){ fc.style.borderColor='#2b6cb0'; fc.style.background='rgba(43,108,176,.06)'; }
+      }
+      info.innerHTML=`<span class="code">${e.code.split(' ')[0]}</span><span class="type">${e.type}</span>
+        <div class="desc">${e.desc}</div><div class="eval">${e.eval}</div>`;
+    };
+    box.appendChild(b);
+  });
+  // 3d 면 초기화 보강
+  if(is3d){
+    const orig=clearHL;
+  }
+}
+
+/* 3d 면 색 초기화용 오버라이드 */
+const _clearHL = clearHL;
+clearHL = function(scope){
+  _clearHL(scope);
+  scope.querySelectorAll('[id^="d3-face-"]').forEach(f=>{
+    f.style.borderColor='#b0bac6'; f.style.background='transparent';
+  });
+};
+</script>
+</body>
+</html>

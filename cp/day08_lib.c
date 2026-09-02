@@ -10,6 +10,7 @@ void input1Darray(int row, int col, int *array)
         }
     }
 }
+
 void input2Darray(int row, int col, int (*array)[col])
 {
     for (int i = 0; i < row; i++) {
@@ -18,6 +19,7 @@ void input2Darray(int row, int col, int (*array)[col])
         }
     }
 }
+
 void print2Darray(int row, int col, int *array)
 {
     for (int i = 0; i < row; i++) {
@@ -25,5 +27,26 @@ void print2Darray(int row, int col, int *array)
             printf("%3d ", *(array + i * col + j));
         }
         printf("\n");
+    }
+}
+
+void input_strings(char (*animal)[STRING_LENGTH], int n)
+{
+    for (int i = 0; i < n; i++) {
+        (void)scanf("%9s", animal[i]);
+    }
+}
+
+void print_strings(const char (*animal)[STRING_LENGTH], int n)
+{
+    for (int i = 0; i < n; i++) {
+        printf("%s\n", animal[i]);
+    }
+}
+
+void print_strings02(const char **animal, int n)
+{
+    for (int i = 0; i < n; i++) {
+        printf("%s\n", animal[i]);
     }
 }
