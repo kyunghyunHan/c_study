@@ -10,7 +10,7 @@ int sum_1d(int *a, int r)
     }
     return sum;
 }
-int sum_2d(int(*a)[4], int r, int c)
+int sum_2d(int (*a)[4], int r, int c)
 {
     int sum = 0;
     for (int i = 0; i < r; i++)
@@ -22,21 +22,53 @@ int sum_2d(int(*a)[4], int r, int c)
     }
     return sum;
 }
-int sum_3d(int (*b)[3][4],int r , int c, int h){
+int sum_3d(int (*b)[3][4], int r, int c, int h)
+{
     int sum = 0;
     int b1 = 0;
-    for (int i = 0; i<r;i++){
-        #if !b1
-        sum += sum_2d(*(b+i),c,h);
-        #endif
-        #if b1
-        for (int j = 0; j<c;j++){
+    for (int i = 0; i < r; i++)
+    {
+#if !b1
+        sum += sum_2d(*(b + i), c, h);
+#endif
+#if b1
+        for (int j = 0; j < c; j++)
+        {
 
-            for (int k = 0; k<h;k++){
-                sum+=*(*(*(b+i)+j)+k);
+            for (int k = 0; k < h; k++)
+            {
+                sum += *(*(*(b + i) + j) + k);
             }
         }
-        #endif
+#endif
     }
     return sum;
+}
+
+void exchange0(int *a, int *b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+void exchange1(int **a, int **b)
+{
+    int temp = **a;
+    **a = **b;
+    **b = temp;
+}
+void exchange2(int ***a, int ***b)
+{
+    int temp = ***a;
+    ***a = ***b;
+    ***b = temp;
+}
+
+void print_string03(int *pary)
+{
+    for (int i = 0; i < SIZE(pary); i++)
+    {
+        printf("%s", *(pary + i));
+    }
+    printf("\n");
 }

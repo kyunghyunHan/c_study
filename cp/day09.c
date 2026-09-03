@@ -1,5 +1,5 @@
 #include "day09_lib.h"
-
+#include <stdio.h>
 #if 0
 int main(void){
     int iary[5]= {1,2,3,4,5};
@@ -23,7 +23,7 @@ int main(void){
 }
 #endif
 
-#if 1
+#if 0
 int main(void)
 {
     int a[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
@@ -45,4 +45,21 @@ int main(void)
     printf("%d\n", sum);
     return 0;
 }
+#endif
+
+#if 1
+int main(void)
+{
+    int a = 10, b = 0;
+    int *ap = &a, *bp = &b;
+    int **app = &ap, ** bpp = &bp;
+    exchange0(&a, &b);
+    printf("%d %d %p %p %p\n", a, b, ap, bp, app);
+    exchange1(&ap, &bp);
+    printf("%d %d %p %p %p\n", a, b, ap, bp, app);
+    exchange2(&app, &bpp);
+    printf("%d %d %p %p %p\n", a, b, ap, bp, app);
+    return 0;
+}
+
 #endif

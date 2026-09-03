@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>*(*(pary+1)+3) 단계별 해부</title>
+<style>
+  :root{
+    --bg:#12141a;
+    --panel:#1b1e27;
+    --panel-2:#20242f;
+    --ink:#e8e9ee;
+    --sub:#9aa0b4;
+    --line:#2c3040;
+
+    --c1:#5aa9ff;   /* pary + 1        : 포인터 배열 인덱싱 */
+    --c2:#39c98f;   /* *(pary + 1)     : 역참조 → 행 시작 주소 */
+    --c3:#f0b13a;   /* ...+3           : 포인터 산술 */
+    --c4:#ef6a6a;   /* *(...)          : 최종 역참조 → 값 */
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    line-height:1.6;
+    padding:48px 20px 90px;
+  }
+  .wrap{max-width:920px;margin:0 auto;}
+  h1{
+    font-size:26px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+    margin:0 0 6px;
+  }
+  .lead{color:var(--sub);font-size:14.5px;margin:0 0 40px;}
+  code, .mono{font-family:"JetBrains Mono","SFMono-Regular",Menlo,Consolas,monospace;}
+
+  h2{
+    font-size:17px;
+    margin:56px 0 18px;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  h2 .tag{
+    font-size:11.5px;
+    color:var(--sub);
+    font-weight:500;
+  }
+
+  .decl{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 18px;
+    font-size:14.5px;
+    color:#c7cbdb;
+    white-space:pre;
+    overflow-x:auto;
+    margin-bottom:26px;
+  }
+
+  /* ---- 중첩 수식 표시줄 ---- */
+  .expr-box{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:26px 24px 20px;
+    margin-bottom:30px;
+  }
+  .expr-box .expr-title{
+    font-size:12.5px;
+    color:var(--sub);
+    margin-bottom:14px;
+  }
+  .expr{
+    font-size:22px;
+    text-align:center;
+    letter-spacing:0.5px;
+  }
+  .lv1{color:var(--c1);}
+  .lv2{color:var(--c2);}
+  .lv3{color:var(--c3);}
+  .lv4{color:var(--c4);}
+  .lv2 .lv1, .lv3 .lv1, .lv3 .lv2{ }
+  .expr .num{color:#e8e9ee;}
+
+  /* ---- 단계 카드 ---- */
+  .steps{display:flex;flex-direction:column;gap:14px;}
+  .step{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-left:5px solid var(--c1);
+    border-radius:10px;
+    padding:18px 20px;
+  }
+  .step.s2{border-left-color:var(--c2);}
+  .step.s3{border-left-color:var(--c3);}
+  .step.s4{border-left-color:var(--c4);}
+
+  .step-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:8px;
+  }
+  .step-expr{
+    font-size:17px;
+    font-weight:600;
+  }
+  .s1 .step-expr{color:var(--c1);}
+  .s2 .step-expr{color:var(--c2);}
+  .s3 .step-expr{color:var(--c3);}
+  .s4 .step-expr{color:var(--c4);}
+  .step-type{
+    font-size:12px;
+    color:var(--sub);
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:2px 8px;
+  }
+  .step-desc{font-size:14px;color:#c7cbdb;}
+  .step-desc b{color:var(--ink);font-weight:600;}
+
+  /* ---- 메모리 다이어그램 ---- */
+  .mem{
+    margin-top:14px;
+    display:flex;
+    align-items:flex-start;
+    gap:36px;
+    flex-wrap:wrap;
+  }
+  .mem-col{display:flex;flex-direction:column;align-items:center;}
+  .mem-label{font-size:11px;color:var(--sub);margin-bottom:6px;}
+  .pary-row{display:flex;}
+  .pary-cell{
+    width:52px;height:40px;
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;color:var(--sub);
+    background:var(--panel-2);
+    position:relative;
+  }
+  .pary-cell .idx{
+    position:absolute;top:-18px;font-size:10.5px;color:var(--sub);
+  }
+  .pary-cell.hit{
+    border-color:var(--c1);
+    color:var(--c1);
+    font-weight:700;
+    box-shadow:0 0 0 1px var(--c1) inset;
+  }
+
+  .rows{display:flex;flex-direction:column;gap:6px;}
+  .arow{display:flex;align-items:center;gap:8px;}
+  .arow .name{width:38px;font-size:11.5px;color:var(--sub);text-align:right;}
+  .cells{display:flex;}
+  .cell{
+    width:40px;height:36px;
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12.5px;color:#c7cbdb;
+    background:var(--panel-2);
+  }
+  .cell.rowhit{background:#1d3446;color:var(--c2);}
+  .cell.elhit{
+    background:var(--c4);
+    color:#12141a;
+    font-weight:800;
+  }
+  .cell.movehit{outline:2px solid var(--c3);outline-offset:-2px;}
+
+  .arrow-note{
+    font-size:11.5px;
+    color:var(--c1);
+    margin-top:6px;
+    text-align:center;
+  }
+
+  /* ---- 2차원 배열 블록 ---- */
+  .flat{
+    display:flex;
+    gap:4px;
+    flex-wrap:wrap;
+    max-width:560px;
+  }
+  .flat .cell{width:38px;}
+
+  .final-badge{
+    display:inline-block;
+    margin-top:16px;
+    background:var(--c4);
+    color:#12141a;
+    font-weight:800;
+    font-size:14px;
+    padding:6px 14px;
+    border-radius:8px;
+  }
+
+  /* ---- 비교 테이블 ---- */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    font-size:13.5px;
+  }
+  th,td{
+    padding:11px 14px;
+    border-bottom:1px solid var(--line);
+    text-align:left;
+    vertical-align:top;
+  }
+  th{
+    background:var(--panel-2);
+    color:var(--sub);
+    font-weight:600;
+    font-size:12.5px;
+  }
+  tr:last-child td{border-bottom:none;}
+  td.a{color:var(--c1);font-weight:600;}
+  td.b{color:var(--c2);font-weight:600;}
+
+  .note{
+    font-size:12.5px;
+    color:var(--sub);
+    margin-top:8px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>*(*(pary+1)+3) 단계별로 뜯어보기</h1>
+  <p class="lead">색은 항상 같은 규칙입니다 — <span style="color:var(--c1)">파랑=포인터 배열 이동</span>,
+  <span style="color:var(--c2)">초록=역참조(행 확보)</span>,
+  <span style="color:var(--c3)">주황=포인터 산술(칸 이동)</span>,
+  <span style="color:var(--c4)">빨강=최종 역참조(값 획득)</span>.</p>
+
+  <div class="decl">int ary1[4] = {1, 2, 3, 4};
+int ary2[4] = {5, 6, 7, 8};
+int ary3[4] = {9, 10, 11, 12};
+int *pary[3] = {ary1, ary2, ary3};</div>
+
+  <h2>1부 — <span class="mono">pary[1][3]</span> = <span class="mono">*(*(pary+1)+3)</span> <span class="tag">int *pary[4] (포인터 배열)</span></h2>
+
+  <div class="expr-box">
+    <div class="expr-title">중첩 구조 — 바깥쪽(빨강)부터 읽지만, 계산은 안쪽(파랑)부터 진행됩니다</div>
+    <div class="expr mono">
+      <span class="lv4">*(<span class="lv3"><span class="lv2">*(<span class="lv1">pary + 1</span>)</span> + <span class="num">3</span></span>)</span>
+    </div>
+  </div>
+
+  <div class="steps">
+
+    <div class="step s1">
+      <div class="step-head">
+        <span class="step-expr mono">① pary + 1</span>
+        <span class="step-type">타입: int**</span>
+      </div>
+      <div class="step-desc"><b>pary</b>는 "int* 3개짜리 배열"입니다. +1은 <b>포인터 1칸(4바이트)</b>을 건너뛰어
+      <b>pary[1]</b> 칸, 즉 <b>ary2의 시작 주소가 담긴 위치</b>를 가리킵니다.</div>
+      <div class="mem">
+        <div class="mem-col">
+          <div class="mem-label">pary (포인터들의 배열)</div>
+          <div class="pary-row">
+            <div class="pary-cell"><span class="idx">[0]</span>&ary1</div>
+            <div class="pary-cell hit"><span class="idx">[1]</span>&ary2</div>
+            <div class="pary-cell"><span class="idx">[2]</span>&ary3</div>
+          </div>
+          <div class="arrow-note">↑ pary+1 은 이 칸의 <b>주소</b>를 가리킴 (아직 역참조 전)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step s2">
+      <div class="step-head">
+        <span class="step-expr mono">② *(pary + 1)</span>
+        <span class="step-type">타입: int*</span>
+      </div>
+      <div class="step-desc">①에서 가리킨 칸을 <b>역참조</b>하면 그 칸에 저장된 값, 즉 <b>ary2의 시작 주소</b>가 나옵니다.
+      이제부터는 <b>ary2 배열을 가리키는 평범한 int* 포인터</b>입니다.</div>
+      <div class="mem">
+        <div class="mem-col">
+          <div class="rows">
+            <div class="arow">
+              <span class="name">ary2</span>
+              <div class="cells">
+                <div class="cell rowhit">5</div>
+                <div class="cell rowhit">6</div>
+                <div class="cell rowhit">7</div>
+                <div class="cell rowhit">8</div>
+              </div>
+            </div>
+          </div>
+          <div class="arrow-note">↑ *(pary+1) 은 이 행의 <b>[0]번 칸</b>을 가리킴</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step s3">
+      <div class="step-head">
+        <span class="step-expr mono">③ *(pary + 1) + 3</span>
+        <span class="step-type">타입: int*</span>
+      </div>
+      <div class="step-desc">②에서 얻은 <b>ary2</b> 포인터에서 <b>int 3칸</b>만큼 이동합니다.
+      "포인터 산술"이라 3은 자동으로 <b>3 × sizeof(int)</b>바이트로 계산됩니다. → <b>ary2[3]의 주소</b>.</div>
+      <div class="mem">
+        <div class="mem-col">
+          <div class="rows">
+            <div class="arow">
+              <span class="name">ary2</span>
+              <div class="cells">
+                <div class="cell">5</div>
+                <div class="cell">6</div>
+                <div class="cell">7</div>
+                <div class="cell movehit">8</div>
+              </div>
+            </div>
+          </div>
+          <div class="arrow-note">↑ +3칸 이동해 <b>&ary2[3]</b> 위치에 도달 (아직 값은 안 꺼냄)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step s4">
+      <div class="step-head">
+        <span class="step-expr mono">④ *(*(pary + 1) + 3)</span>
+        <span class="step-type">타입: int</span>
+      </div>
+      <div class="step-desc">③에서 도착한 주소를 마지막으로 <b>역참조</b>해 실제 값을 꺼냅니다.</div>
+      <div class="mem">
+        <div class="mem-col">
+          <div class="rows">
+            <div class="arow">
+              <span class="name">ary2</span>
+              <div class="cells">
+                <div class="cell">5</div>
+                <div class="cell">6</div>
+                <div class="cell">7</div>
+                <div class="cell elhit">8</div>
+              </div>
+            </div>
+          </div>
+          <div class="final-badge">결과 = 8</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <h2>2부 — 2차원 배열에서의 <span class="mono">*(*(ary+1)+3)</span> <span class="tag">int ary[3][4] (진짜 2차원 배열)</span></h2>
+
+  <div class="decl">int ary[3][4] = {1,2,3,4, 5,6,7,8, 9,10,11,12};</div>
+
+  <div class="steps">
+    <div class="step s1">
+      <div class="step-head">
+        <span class="step-expr mono">① ary + 1</span>
+        <span class="step-type">타입: int (*)[4]  ← "4개짜리 배열"을 가리키는 포인터</span>
+      </div>
+      <div class="step-desc">ary는 <b>메모리가 통째로 이어진 하나의 블록</b>입니다. 여기서 +1은 int 1칸이 아니라
+      <b>int 4개(16바이트) 통째로</b> 건너뜁니다 — 한 "행" 전체가 이동 단위이기 때문입니다.</div>
+      <div class="mem">
+        <div class="mem-col">
+          <div class="mem-label">ary (하나로 이어진 12개 int 블록)</div>
+          <div class="flat">
+            <div class="cell">1</div><div class="cell">2</div><div class="cell">3</div><div class="cell">4</div>
+            <div class="cell rowhit">5</div><div class="cell rowhit">6</div><div class="cell rowhit">7</div><div class="cell rowhit">8</div>
+            <div class="cell">9</div><div class="cell">10</div><div class="cell">11</div><div class="cell">12</div>
+          </div>
+          <div class="arrow-note">↑ ary+1 은 <b>초록 4칸(ary[1] 행)의 시작 주소</b>를 가리킴 — pary처럼 어딘가에 저장된 "포인터 값"을 읽는 게 아니라, 주소를 <b>계산</b>해서 만든 것</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step s2">
+      <div class="step-head">
+        <span class="step-expr mono">② *(ary + 1)</span>
+        <span class="step-type">타입: int*</span>
+      </div>
+      <div class="step-desc">①의 "행 포인터"를 역참조하면 <b>배열 자체(ary[1])</b>가 나오고, 이는 곧바로
+      <b>int*로 decay</b>되어 ary[1][0]을 가리키는 포인터가 됩니다.</div>
+    </div>
+
+    <div class="step s3">
+      <div class="step-head">
+        <span class="step-expr mono">③ *(ary + 1) + 3</span>
+        <span class="step-type">타입: int*</span>
+      </div>
+      <div class="step-desc">이제부터는 1부의 ③과 동일합니다. int 3칸(12바이트) 이동해 <b>ary[1][3]의 주소</b>에 도달.</div>
+    </div>
+
+    <div class="step s4">
+      <div class="step-head">
+        <span class="step-expr mono">④ *(*(ary + 1) + 3)</span>
+        <span class="step-type">타입: int</span>
+      </div>
+      <div class="step-desc">마지막 역참조로 값을 꺼냅니다.</div>
+      <div class="mem">
+        <div class="mem-col">
+          <div class="flat">
+            <div class="cell">1</div><div class="cell">2</div><div class="cell">3</div><div class="cell">4</div>
+            <div class="cell">5</div><div class="cell">6</div><div class="cell">7</div><div class="cell elhit">8</div>
+            <div class="cell">9</div><div class="cell">10</div><div class="cell">11</div><div class="cell">12</div>
+          </div>
+          <div class="final-badge">결과 = 8</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>핵심 차이 — 왜 결과는 같은데 "이동 방식"이 다른가</h2>
+  <table>
+    <tr>
+      <th></th>
+      <th style="color:var(--c1)">int *pary[4]</th>
+      <th style="color:var(--c2)">int ary[3][4]</th>
+    </tr>
+    <tr>
+      <td>메모리 구조</td>
+      <td>포인터 4개가 저장된 배열. 각 포인터가 <b>서로 다른 곳</b>(ary1/ary2/ary3)을 가리킴 — 흩어져 있어도 됨</td>
+      <td>12개 int가 <b>한 블록에 연속</b>으로 붙어 있음. 행이라는 개념은 컴파일러 계산일 뿐</td>
+    </tr>
+    <tr>
+      <td><span class="mono">X + 1</span>의 의미</td>
+      <td class="a">"1번 칸에 <b>저장된 주소값</b>을 읽어라" (실제 존재하는 포인터 이동, 4바이트 단위)</td>
+      <td class="b">"<b>4×sizeof(int)만큼 주소를 계산</b>하라" (저장된 포인터가 아니라 산술로 만든 주소, 16바이트 단위)</td>
+    </tr>
+    <tr>
+      <td><span class="mono">*(X+1)</span> 후 타입</td>
+      <td>int* (ary2를 가리킴)</td>
+      <td>int* (ary[1]을 가리킴) — 겉보기엔 동일</td>
+    </tr>
+    <tr>
+      <td>행 간 연속성</td>
+      <td>보장 안 됨 — ary1, ary2, ary3가 메모리 어디에 있든 상관없음</td>
+      <td>항상 보장됨 — ary[0] 바로 뒤에 ary[1]이 붙어 있음</td>
+    </tr>
+    <tr>
+      <td>sizeof(전체)</td>
+      <td>3 × 4바이트 = 12 (포인터 크기 기준, 32비트)</td>
+      <td>3 × 4 × 4바이트 = 48 (int 12개 실제 데이터)</td>
+    </tr>
+  </table>
+  <p class="note">* 즉 <span class="mono">*(*(X+1)+3)</span>이라는 겉모습은 똑같아도, pary는 "한 단계 더 저장된 주소를 거쳐가는 간접 접근"이고
+  ary는 "연속된 메모리에서 오프셋을 계산하는 직접 접근"이라는 점이 본질적 차이입니다.</p>
+
+</div>
+</body>
+</html>
