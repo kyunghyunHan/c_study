@@ -25,13 +25,12 @@ int sum_2d(int (*a)[4], int r, int c)
 int sum_3d(int (*b)[3][4], int r, int c, int h)
 {
     int sum = 0;
-    int b1 = 0;
     for (int i = 0; i < r; i++)
     {
-#if !b1
+#if 1
         sum += sum_2d(*(b + i), c, h);
 #endif
-#if b1
+#if 0
         for (int j = 0; j < c; j++)
         {
 
@@ -64,11 +63,10 @@ void exchange2(int ***a, int ***b)
     ***b = temp;
 }
 
-void print_string03(int *pary)
+void print_string03(const char *pary[], size_t count)
 {
-    for (int i = 0; i < SIZE(pary); i++)
+    for (size_t i = 0; i < count; i++)
     {
-        printf("%s", *(pary + i));
+        printf("%s\n", pary[i]);
     }
-    printf("\n");
 }

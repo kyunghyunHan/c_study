@@ -47,7 +47,7 @@ int main(void)
 }
 #endif
 
-#if 1
+#if 0
 int main(void)
 {
     int a = 10, b = 0;
@@ -63,3 +63,32 @@ int main(void)
 }
 
 #endif
+
+#if 1
+
+int main(void)
+{
+    int ary1[] = {5, 1, 2, 3, 4};
+    int ary2[] = {4, 1, 2, 3};
+    int ary3[] = {6, 1, 2, 3, 4, 5, 6};
+    int *pary[3] = {ary1, ary2, ary3};
+
+    print_var_array(pary, (int)SIZE(pary));
+    return 0;
+}
+#endif
+void print_1d_array(int *ary, int n)
+{
+    for (int i = 1; i < n; i++)
+    {
+        printf("%d ", ary[i]);
+    }
+    printf("\n");
+}
+void print_var_array(int **pary, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        print_1d_array(*(pary + i), **(pary + i));
+    }
+}
