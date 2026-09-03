@@ -3,7 +3,7 @@
 #if 0
 
 int main(void) {
-    int ans[11] = {0};
+    int ans[10] = {0};
     int n;
 
     while (1) {

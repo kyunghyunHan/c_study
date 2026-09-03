@@ -44,25 +44,22 @@ void print_inventory(const Player *player);
 // // 이름으로 아이템 검색
 // // 찾으면 해당 Item의 주소 반환
 // // 없으면 NULL 반환
-// Item *find_item(
-//     Player *player,
-//     const char *name
-// );
+Item *find_item(
+    Player *player,
+    const char *name);
 
 // // 아이템 삭제
 // // 삭제 후 뒤의 아이템들을 앞으로 한 칸씩 이동
-// void delete_item(
-//     Player *player,
-//     const char *name
-// );
+void delete_item(
+    Player *player,
+    const char *name);
 
 // // 무기 장착
 // // find_item()을 이용해서
 // // player->weapon에 Item의 주소 저장
-// void equip_item(
-//     Player *player,
-//     const char *name
-// );
+void equip_item(
+    Player *player,
+    const char *name);
 
 // 플레이어 정보 출력
 void print_player(
@@ -80,17 +77,15 @@ void print_player(
 //     Player *player
 // );
 
-// // qsort용 비교 함수
-// // attack 높은 아이템부터 정렬
-// int compare_item(
-//     const void *a,
-//     const void *b
-// );
+// qsort용 비교 함수
+// 이름순으로 정렬
+int compare_item(
+    const void *a,
+    const void *b);
 
-// // 인벤토리를 공격력 높은 순으로 정렬
-// void sort_inventory(
-//     Player *player
-// );
+// 인벤토리를 이름순으로 정렬
+void sort_inventory(
+    Player *player);
 
 int main(void)
 {
@@ -99,7 +94,7 @@ int main(void)
 
     int menu;
 
-    // char item_name[20];
+    char item_name[20];
 
     init_player(&player);
     init_monster(&monster);
@@ -149,62 +144,60 @@ int main(void)
 
             break;
 
-            // case 4:
-            // {
-            //     printf("검색할 아이템 이름: ");
+        case 4:
+        {
+            printf("검색할 아이템 이름: ");
 
-            //     scanf("%19s", item_name);
+            scanf("%19s", item_name);
 
-            //     Item *result =
-            //         find_item(&player, item_name);
+            Item *result =
+                find_item(&player, item_name);
 
-            //     if (result != NULL)
-            //     {
-            //         printf("이름 : %s\n", result->name);
-            //         printf("공격력 : %d\n", result->attack);
-            //         printf("가격 : %d\n", result->price);
-            //     }
-            //     else
-            //     {
-            //         printf("아이템이 없습니다.\n");
-            //     }
+            if (result != NULL)
+            {
+                printf("이름 : %s\n", result->name);
+                printf("공격력 : %d\n", result->attack);
+                printf("가격 : %d\n", result->price);
+            }
+            else
+            {
+                printf("아이템이 없습니다.\n");
+            }
 
-            //     break;
-            // }
+            break;
+        }
 
-            // case 5:
+        case 5:
 
-            //     printf("삭제할 아이템 이름: ");
+            printf("삭제할 아이템 이름: ");
 
-            //     scanf("%19s", item_name);
+            scanf("%19s", item_name);
 
-            //     delete_item(
-            //         &player,
-            //         item_name
-            //     );
+            delete_item(
+                &player,
+                item_name);
 
-            //     break;
+            break;
 
-            // case 6:
+        case 6:
 
-            //     printf("장착할 아이템 이름: ");
+            printf("장착할 아이템 이름: ");
 
-            //     scanf("%19s", item_name);
+            scanf("%19s", item_name);
 
-            //     equip_item(
-            //         &player,
-            //         item_name
-            //     );
+            equip_item(
+                &player,
+                item_name);
 
-            //     break;
+            break;
 
-            // case 7:
+        case 7:
 
-            //     sort_inventory(&player);
+            sort_inventory(&player);
 
-            //     printf("정렬 완료\n");
+            printf("정렬 완료\n");
 
-            //     break;
+            break;
 
             // case 8:
 
@@ -311,6 +304,7 @@ void print_player(
         printf("무기 공격력 : %d\n", (*player).inventory[i].attack);
         printf("무기 가격  : %d\n", (*player).inventory[i].price);
     }
+    printf("장착 아이템 : %s\n", (*(*player).weapon).name);
 }
 
 void add_item(Player *player)
@@ -332,4 +326,84 @@ void print_inventory(const Player *player)
     {
         printf("무기%d : %s\n", i, (*player).inventory[i].name);
     }
+}
+
+// // 이름으로 아이템 검색
+// // 찾으면 해당 Item의 주소 반환
+// // 없으면 NULL 반환
+Item *find_item(
+    Player *player,
+    const char *name)
+{
+    int len = (*player).item_count;
+
+    for (int i = 0; i < len; i++)
+    {
+        if (strcmp((*player).inventory[i].name, name) == 0)
+        {
+            printf("찾았다\n");
+
+            return &player->inventory[i];
+        }
+    }
+    return NULL;
+}
+
+// // 아이템 삭제
+// // 삭제 후 뒤의 아이템들을 앞으로 한 칸씩 이동
+void delete_item(
+    Player *player,
+    const char *name)
+{
+    Item *result = find_item(player, name);
+    if (result == NULL)
+    {
+        printf("아이템을 찾을수 없습니다.");
+        return;
+    }
+    int index = result - player->inventory;
+    for (int i = index; i < player->item_count - 1; i++)
+    {
+        player->inventory[i] = player->inventory[i + 1];
+    }
+    (player->item_count)--;
+}
+
+// // 무기 장착
+// // find_item()을 이용해서
+// // player->weapon에 Item의 주소 저장
+void equip_item(
+    Player *player,
+    const char *name)
+{
+    Item *result = find_item(player, name);
+    if (result == NULL)
+    {
+        printf("아이템을 찾을수 없습니다.");
+        return;
+    }
+    (*player).weapon = result;
+}
+
+
+int compare_item(
+    const void *a,
+    const void *b)
+{
+    const Item *item_a = a;
+    const Item *item_b = b;
+
+    return strcmp(item_a->name, item_b->name);
+}
+
+// 인벤토리를 이름순으로 정렬
+void sort_inventory(
+    Player *player)
+{
+    qsort(
+        player->inventory,        // 정렬할 배열 시작 주소
+        player->item_count,           // 원소 개수
+        sizeof(Item), // 원소 하나의 크기
+        compare_item  // 비교 함수
+    );
 }
