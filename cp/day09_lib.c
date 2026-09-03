@@ -70,3 +70,59 @@ void print_string03(const char *pary[], size_t count)
         printf("%s\n", pary[i]);
     }
 }
+
+void print_1d_array(int *ary, int n)
+{
+    for (int i = 1; i < n; i++)
+    {
+        printf("%d ", ary[i]);
+    }
+    printf("\n");
+}
+void print_var_array(int **pary, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        print_1d_array(*(pary + i), **(pary + i));
+    }
+}
+int compint01(const void *a, const void *b)
+{
+    int ia = *(int *)a;
+    int ib = *(int *)b;
+
+    if (ia == ib)
+        return 0;
+    if (ia > ib)
+        return 1;
+    return -1;
+}
+
+int compint(const void *a, const void *b)
+{
+    int ia = *(int *)a;
+    int ib = *(int *)b;
+
+    return (ia > ib) - (ia < ib);
+}
+
+
+int compint01(const void *a, const void *b)
+{
+    int ia = *(int *)a;
+    int ib = *(int *)b;
+
+    if (ia == ib)
+        return 0;
+    if (ia > ib)
+        return 1;
+    return -1;
+}
+
+int compint(const void *a, const void *b)
+{
+    int ia = *(int *)a;
+    int ib = *(int *)b;
+
+    return (ia > ib) - (ia < ib);
+}

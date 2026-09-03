@@ -64,7 +64,7 @@ int main(void)
 
 #endif
 
-#if 1
+#if 0
 
 int main(void)
 {
@@ -77,18 +77,10 @@ int main(void)
     return 0;
 }
 #endif
-void print_1d_array(int *ary, int n)
-{
-    for (int i = 1; i < n; i++)
-    {
-        printf("%d ", ary[i]);
-    }
-    printf("\n");
+
+
+#if 1
+int main(void){
+    return 0;
 }
-void print_var_array(int **pary, int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        print_1d_array(*(pary + i), **(pary + i));
-    }
-}
+#endif
