@@ -145,101 +145,244 @@ int main(void)
 #if 00
 #endif
 
+
 #if 1
-
 /*
-3차 사용자에게 어떤 연산을 할지에 대해 선택을 받고 동작 결과를 출력
-1. 더하기
-2. 뺴기
-3. 곱하기
-4.나누기
+*(&*(*(*a+2) +1))  = >  4
 
-연산 번호를 입력 하시오 : 1
-걀과는 20 + 5 = 25 입니다
-
+*a+2 =
 */
-typedef struct
+#endif
+
+#if 0
+// void *memmove(void *dest, const void *src, size_t size);
+//  memmove();
+
+void compint()P_ALL
+void swap02(void *ap, void *bp, int size)
 {
-    const char *name;
-    int (*func)(int, int);
-} Op;
+    void *temp = NULL;
+    temp = malloc(size);
+    memmove(temp, ap, size);
+    memmove(ap, bp, size);
+    memmove(bp, temp, size);
+    free(temp);
+}
+void sort(int *ary, int n)
+{
+    int s = n - 1;
+    for (int i = 0; i < s; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (ary[i] > ary[j])
+            {
+                int temp;
 
-#define OP_COUNT 4
-
-void init(Op ops[OP_COUNT]);
+                memmove(&temp, &ary[i], sizeof(temp));
+                memmove(&ary[i], &ary[j], sizeof(ary[i]));
+                memmove(&ary[j], &temp, sizeof(ary[j]));
+            }
+        }
+    }
+}
 
 int main(void)
 {
-    Op ops[OP_COUNT];
-    int menu;
-    int total = 0;
+    int ary[5] = {4, 2, 5, 1, 3};
 
-    init(ops);
+    sort(ary, 5);
 
-    while (1)
+    for (int i = 0; i < 5; i++)
     {
-        int input;
-
-        printf("======================\n");
-        printf("0. 결과 출력\n");
-        printf("1. 더하기\n");
-        printf("2. 빼기\n");
-        printf("3. 곱하기\n");
-        printf("4. 나누기\n");
-        printf("연산 번호를 입력하세요: ");
-
-        scanf("%d", &menu);
-
-        switch (menu)
-        {
-        case 0:
-            printf("종합: %d\n", total);
-            break;
-
-        case 1:
-            printf("더하기 할 값 입력: ");
-            scanf("%d", &input);
-
-            total = ops[menu - 1].func(total, input);
-            printf("현재 결과: %d\n", total);
-            break;
-
-        case 2:
-            printf("빼기 할 값 입력: ");
-            scanf("%d", &input);
-
-            total = ops[menu - 1].func(total, input);
-            printf("현재 결과: %d\n", total);
-            break;
-
-        case 3:
-            printf("곱하기 할 값 입력: ");
-            scanf("%d", &input);
-            total = ops[menu - 1].func(total, input);
-            printf("현재 결과: %d\n", total);
-            break;
-
-        case 4:
-            printf("나누기 할 값 입력: ");
-            scanf("%d", &input);
-
-            total = ops[menu - 1].func(total, input);
-            printf("현재 결과: %d\n", total);
-            break;
-
-        default:
-            printf("0부터 4까지의 번호를 입력하세요.\n");
-            break;
-        }
+        printf("%d%s", ary[i], i == 4 ? "\n" : " ");
     }
+
+    return 0;
+}
+#endif
+
+#if 0
+
+void swap_02(void *ap, void *bp, int size)
+{
+    void *temp = NULL;
+    temp = malloc(size);
+    memmove(temp, ap, size);
+    memmove(ap, bp, size);
+    memmove(bp, temp, size);
+    free(temp);
+}
+
+int compint01(const void *a, const void *b)
+{
+    int ia = *(int *)a;
+    int ib = *(int *)b;
+    if (ia == ib)
+        return 0;
+    if (ia > ib)
+        return 1;
+    return -1;
+}
+
+int compint(const void *a, const void *b)
+{
+    int ia = *(int *)a;
+    int ib = *(int *)b;
+    return (ia > ib) - (ia < ib); //  3가지 연산 (<, >, -)가 무조건 수행되는 단점이 있음
+}
+int compstr(const void *a, const void *b)
+{
+    return strcmp(*(char **)a, *(char **)b);
+}
+
+int compdouble(const void *a, const void *b)
+{
+    double da = *(double *)a;
+    double db = *(double *)b;
+    if (da > db)
+        return 1;
+    if (da < db)
+        return -1;
     return 0;
 }
 
-void init(Op ops[OP_COUNT])
+// 정렬 - 함수포인터활용
+void sort(void *base, int num, int size, int (*comp)(void *, void *))
 {
-    ops[0] = (Op){"더하기", add};
-    ops[1] = (Op){"빼기", sub};
-    ops[2] = (Op){"곱하기", mul};
-    ops[3] = (Op){"나누기", divi};
+    char *cbase = (char *)base;
+    void *a;
+    void *b;
+    int s = num - 1;
+    for (int i = 0; i < s; i++)
+    {
+        for (int j = i + 1; j < num; j++)
+        {
+            a = cbase + i * size;
+            b = cbase + j * size;
+            if (comp(a, b) > 0)
+            {
+                swap_02(a, b, size);
+            }
+        }
+    }
 }
 #endif
+#if 0
+void swap_03(void *a, void *b, int size)
+{
+    char *temp = NULL;
+    temp = malloc(size);
+    if (temp == NULL)
+    {
+        return;
+    }
+    memmove(temp, a, size);
+    memmove(a, b, size);
+    memmove(b, temp, size);
+    free(temp);
+}
+void sort_int(int *ary, int num)
+{
+    int s = num - 1;
+    for (int i = 0; i < s; i++)
+    {
+        for (int j = i + 1; j < num; j++)
+        {
+            if (ary[i] > ary[j])
+            {
+                // int temp = *(ary + i);
+                // *(ary + i) = *(ary + j);
+                // *(ary + j) = temp;
+                swap_03(ary + i, ary + j, sizeof(*ary));
+            }
+        }
+    }
+}
+int main(void)
+{
+    int ary[5] = {4, 2, 5, 1, 3};
+    sort_int(ary, 5);
+    for (int i = 0; i < 5; i++)
+    {
+        printf("%d ", ary[i]);
+    }
+    return 0;
+}
+#endif
+
+void swap_03(void *a, void *b, int size)
+{
+    char *temp = NULL;
+    temp = malloc(size);
+    if (temp == NULL)
+    {
+        return;
+    }
+    memmove(temp, a, size);
+    memmove(a, b, size);
+    memmove(b, temp, size);
+    free(temp);
+}
+void sort_int(int *ary, int num)
+{
+    int s = num - 1;
+    for (int i = 0; i < s; i++)
+    {
+        for (int j = i + 1; j < num; j++)
+        {
+            if (ary[i] > ary[j])
+            {
+                // int temp = *(ary + i);
+                // *(ary + i) = *(ary + j);
+                // *(ary + j) = temp;
+                swap_03(ary + i, ary + j, sizeof(*ary));
+            }
+        }
+    }
+}
+// base : 배열의 시작주소
+// num : 배열의 요소 개수
+// size : 1개 요소의 크기
+
+int compint_02(const void *a, const void *b)
+{
+    int ia = *(int *)a;
+    int ib = *(int *)b;
+    if (ia > ib)
+        return 1;
+    if (ia < ib)
+        return -1;
+    return 0;
+}
+void my_sort(void *base, int num, int size,
+             int (*comp)(const void *, const void *))
+{
+    char *cbase = (char *)base;
+    int s = num - 1;
+    for (int i = 0; i < s; i++)
+    {
+        for (int j = i + 1; j < num; j++)
+        {
+            char *a = cbase + (i * size);
+            char *b = cbase + (j * size);
+            if (comp(a, b) > 0)
+            {
+                // int temp = *(ary + i);
+                // *(ary + i) = *(ary + j);
+                // *(ary + j) = temp;
+                swap_03(a, b, size);
+            }
+        }
+    }
+}
+int main(void)
+{
+    int ary[5] = {4, 2, 5, 1, 3};
+    my_sort(ary, SIZE(ary), sizeof(*ary), compint_02);
+    for (int i = 0; i < 5; i++)
+    {
+        printf("%d ", ary[i]);
+    }
+    return 0;
+}
