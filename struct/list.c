@@ -1,5 +1,5 @@
 #include <stdlib.h>
-
+#include <stdio.h>
 typedef int ElementType;
 
 typedef struct tagNode
@@ -8,23 +8,21 @@ typedef struct tagNode
     struct tagNode *next_node;
 } Node;
 
-void create_node();
-void destory_node();
-void append_node();
-void get_node_at();
-void remove_node();
-void insert_after();
-void insert_new_head();
-
 // node 생성
 Node *sll_create_node(ElementType new_data)
 {
     Node *new_node = malloc(sizeof(Node));
+
+    if (new_node == NULL)
+    {
+        return NULL;
+    }
+
     new_node->data = new_data;
     new_node->next_node = NULL;
 
-    return &new_node; // 주소반환
-} // 함수가 종료대면서 new_node는 자동 메모리에서 제거
+    return new_node;
+}
 
 void sll_destory_node(Node *node)
 {
@@ -34,9 +32,9 @@ void sll_destory_node(Node *node)
 void sll_append_node(Node **head, Node *new_node)
 {
     // 헤드 노드가 null 노드 아리면 새로운 노드가 head가된다
-    if ((*head == NULL))
+    if (*head == NULL)
     {
-        *head == new_node;
+        *head = new_node;
     }
     else
     {
@@ -62,7 +60,7 @@ void sll_remove_node(Node **head, Node *remove)
 {
     if ((*head) == remove)
     {
-        *head == remove->next_node;
+        *head = remove->next_node;
     }
     else
     {
@@ -153,5 +151,16 @@ int main(void)
     }
 
     // 모든 노드를 메모리에서 제거
+
+    printf("\nDestorying List..\n");
+    for (int i = 0; i < cnt; i++)
+    {
+        current = sll_get_node_at(list, 0);
+        if (current != NULL)
+        {
+            sll_remove_node(&list, current);
+            sll_destory_node(current);
+        }
+    }
     return 0;
 }
