@@ -1,122 +1,4 @@
 #include <stdio.h>
-/*
-연산 프로그램
-
-1.메뉴출력
-->0 종료 1.덧셈 2.뺄셈 3.곱셈 4.나눗셈 5.나머지
-2.결과 표시 후 다시 1번 동작 반복
-3.종료 ->프로그램 종료
-
-*/
-
-int add(int a, int b);
-
-int sub(int a, int b);
-
-int mul(int a, int b);
-
-int divi(int a, int b);
-
-int mod(int a, int b);
-
-typedef struct
-{
-    const char *name;
-    int (*func)(int, int);
-} Op;
-
-#define OP_COUNT 4
-
-void init(Op ops[OP_COUNT]);
-
-int main(void)
-{
-    Op ops[OP_COUNT];
-    int menu;
-    int total = 0;
-
-    init(ops);
-
-    while (1)
-    {
-        int input;
-
-        printf("======================\n");
-        printf("0. 종료\n");
-        printf("1. 더하기\n");
-        printf("2. 빼기\n");
-        printf("3. 곱하기\n");
-        printf("4. 나누기\n");
-        printf("5. mod\n");
-        printf("연산 번호를 입력하세요: ");
-
-        scanf("%d", &menu);
-
-        switch (menu)
-        {
-        case 0:
-            printf("종료");
-            return 0;
-
-        case 1:
-            printf("=====%s======\n", ops[menu - 1].name);
-            printf("입력: ");
-            scanf("%d", &input);
-            printf("입력: %d", input);
-            total = ops[menu - 1].func(total, input);
-            printf("현재 결과: %d\n", total);
-            break;
-
-        case 2:
-            printf("=====%s======\n", ops[menu - 1].name);
-            printf("입력: ");
-            scanf("%d", &input);
-            printf("입력: %d", input);
-            total = ops[menu - 1].func(total, input);
-            printf("현재 결과: %d\n", total);
-            break;
-
-        case 3:
-            printf("=====%s======\n", ops[menu - 1].name);
-            printf("입력: ");
-            scanf("%d", &input);
-            printf("입력: %d", input);
-            total = ops[menu - 1].func(total, input);
-            printf("현재 결과: %d\n", total);
-            break;
-
-        case 4:
-            printf("=====%s======\n", ops[menu - 1].name);
-            printf("입력: ");
-            scanf("%d", &input);
-            printf("입력: %d", input);
-            total = ops[menu - 1].func(total, input);
-            printf("현재 결과: %d\n", total);
-            break;
-        case 5:
-            printf("=====%s======\n", ops[menu - 1].name);
-            printf("입력: ");
-            scanf("%d", &input);
-            printf("입력: %d", input);
-            total = ops[menu - 1].func(total, input);
-            printf("현재 결과: %d\n", total);
-            break;
-        default:
-            printf("0부터 4까지의 번호를 입력하세요.\n");
-            break;
-        }
-    }
-    return 0;
-}
-
-void init(Op ops[OP_COUNT])
-{
-    ops[0] = (Op){"더하기", add};
-    ops[1] = (Op){"빼기", sub};
-    ops[2] = (Op){"곱하기", mul};
-    ops[3] = (Op){"나누기", divi};
-    ops[4] = (Op){"나눈값", mod};
-}
 
 int add(int a, int b)
 {
@@ -141,4 +23,87 @@ int divi(int a, int b)
 int mod(int a, int b)
 {
     return a % b;
+}
+
+int end_op(int a, int b)
+{
+    (void)a;
+    (void)b;
+    printf("프로그램을 종료합니다.\n");
+    return 0;
+}
+
+typedef struct
+{
+    const char *name;
+    const char *sign;
+    int (*func)(int, int);
+} op_t;
+
+void print_arr(const op_t *p, int menu_size)
+{
+    for (int i = 1; i < menu_size; ++i)
+    {
+        printf("%d. %s\n", i, p[i].name);
+    }
+    printf("0. %s\n", p[0].name);
+}
+
+int main(void)
+{
+    int a, b, id;
+    const int menu_size = 6;
+    const op_t menu[6] = {
+        {"종료", "종료", end_op},
+        {"덧셈", "+", add},
+        {"뺄셈", "-", sub},
+        {"곱셈", "*", mul},
+        {"나눗셈(몫)", "/", divi},
+        {"나눗셈(나머지)", "%", mod},
+    };
+    const op_t *op_ptr = NULL;
+
+    while (1)
+    {
+        print_arr(menu, menu_size);
+        printf("메뉴를 선택하세요: ");
+
+        if (scanf("%d", &id) != 1)
+        {
+            printf("숫자를 입력해야 합니다.\n");
+            return 1;
+        }
+
+        if (id < 0 || id >= menu_size)
+        {
+            printf("0부터 %d까지 입력하세요.\n\n", menu_size - 1);
+            continue;
+        }
+
+        op_ptr = &menu[id];
+
+        if (id == 0)
+        {
+            op_ptr->func(0, 0);
+            break;
+        }
+
+        printf("두 정수를 입력하세요: ");
+        if (scanf("%d %d", &a, &b) != 2)
+        {
+            printf("정수 두 개를 입력해야 합니다.\n");
+            return 1;
+        }
+
+        if ((id == 4 || id == 5) && b == 0)
+        {
+            printf("0으로 나누거나 나머지를 구할 수 없습니다.\n\n");
+            continue;
+        }
+
+        printf("결과는 %d %s %d = %d입니다.\n\n",
+               a, op_ptr->sign, b, op_ptr->func(a, b));
+    }
+
+    return 0;
 }
