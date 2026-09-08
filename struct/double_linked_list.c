@@ -1,3 +1,9 @@
+/*
+더블 링크드 리스트
+탐색 기능을 개선
+
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 typedef int ElementType;
@@ -9,6 +15,7 @@ typedef struct tagNode
 } Node;
 
 // node 생성
+// prev_node에 NULL 만 대입
 Node *dll_create_node(ElementType new_data)
 {
     Node *new_node = malloc(sizeof(Node));
@@ -22,18 +29,15 @@ Node *dll_create_node(ElementType new_data)
 
     return new_node;
 }
-
+// 삭제 동일
 void dll_destory_node(Node *node)
 {
     free(node);
 }
-
+// 새로운 테일의 prev포인터도 기존 테일의 주소를 가리키도록
 void dll_append_node(Node **head, Node *new_node)
 {
-    if (head == NULL || new_node == NULL)
-    {
-        return;
-    }
+
     // 헤드 노드가 null 노드 아리면 새로운 노드가 head가된다
     if (*head == NULL)
     {
@@ -51,6 +55,7 @@ void dll_append_node(Node **head, Node *new_node)
         new_node->prev_node = tail; // 기존 테일을 새로운 테일의 prevnode가 가리킴
     }
 }
+// 노드찾기
 Node *dll_get_node_at(Node *head, int location)
 {
     Node *currrent = head;
@@ -61,40 +66,62 @@ Node *dll_get_node_at(Node *head, int location)
     return currrent;
 }
 
-/*복잡 */
+/*복잡
+삭제할 노드의 next_node포인터가 가리키던 노드를 이전노드의 Next포인터가 가리키게함
+삭제할 노드의 prev_node가가리키던 노드를 다음 노드의 prev_포인터가 가리키게함
+그다음 삭제할 노드의 Next_node와 prev_node는 NULL로 초기화f
+
+*/
 void dll_remove_node(Node **head, Node *remove)
 {
     if (head == NULL || *head == NULL || remove == NULL)
     {
         return;
     }
-
-    if ((*head) == remove)
+    // 삭제할 노드가 첫 번째 노드(head)인 경우
+    if (*head == remove)
     {
+        // head를 삭제할 노드의 다음 노드로 이동
         *head = remove->next_node;
+
+        // 다음 노드가 존재한다면
+        // 새로운 head는 이전 노드가 없으므로 prev를 NULL로 설정
         if (*head != NULL)
         {
             (*head)->prev_node = NULL;
         }
+
+        // 삭제할 노드의 연결을 모두 끊음
         remove->prev_node = NULL;
         remove->next_node = NULL;
     }
     else
     {
         Node *temp = remove;
+
+        // 이전 노드가 존재하면
+        // 이전 노드의 next가 삭제할 노드의 다음 노드를 가리키게 함
         if (remove->prev_node != NULL)
         {
             remove->prev_node->next_node = temp->next_node;
         }
+
+        // 다음 노드가 존재하면
+        // 다음 노드의 prev가 삭제할 노드의 이전 노드를 가리키게 함
         if (remove->next_node != NULL)
         {
             remove->next_node->prev_node = temp->prev_node;
         }
+
+        // 삭제할 노드를 리스트에서 완전히 분리
         remove->prev_node = NULL;
         remove->next_node = NULL;
     }
 }
-
+/*
+prevv포인터는 이전노드를 nextnode포인터로는 다음 노드를
+이전노드의 next포인터와 다음노드의 prev포인터는 새노드를 가리키게함
+*/
 void dll_insert_after(Node *current, Node *new_node)
 {
     if (current == NULL || new_node == NULL)
