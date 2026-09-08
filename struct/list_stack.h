@@ -1,13 +1,13 @@
 #ifndef list_stack_h
 #define list_stack_h
 
-typedef struct tag_node
+typedef struct tagNode
 {
     char *data;
-    struct tag_node *next_node;
+    struct tagNode *next_node;
 } Node;
 
-typedef struct tag_linked_list_stack
+typedef struct tagLinkedListStack
 {
     Node *list;
     Node *top;

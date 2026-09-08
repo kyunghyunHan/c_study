@@ -3,17 +3,17 @@
 
 typedef int element_type;
 
-typedef struct node
+typedef struct tagNode
 {
     element_type data;
 
     // 이전 노드를 가리키는 포인터
-    struct node *prev_node;
+    struct tagNode *prev_node;
 
     // 다음 노드를 가리키는 포인터
-    struct node *next_node;
+    struct tagNode *next_node;
 
-} node;
+} Node;
 
 /*
     새로운 노드 생성
@@ -21,9 +21,9 @@ typedef struct node
     처음 생성된 노드는 아직 리스트에 연결되지 않았으므로
     prev_node와 next_node는 NULL로 초기화한다.
 */
-node *cdll_create_node(element_type new_data)
+Node *cdll_create_node(element_type new_data)
 {
-    node *new_node = malloc(sizeof(node));
+    Node *new_node = malloc(sizeof(Node));
 
     if (new_node == NULL)
     {
@@ -40,7 +40,7 @@ node *cdll_create_node(element_type new_data)
 /*
     노드 메모리 해제
 */
-void cdll_destroy_node(node *target)
+void cdll_destroy_node(Node *target)
 {
     free(target);
 }
@@ -48,7 +48,7 @@ void cdll_destroy_node(node *target)
 /*
     리스트의 마지막에 새로운 노드를 추가한다.
 */
-void cdll_append_node(node **head, node *new_node)
+void cdll_append_node(Node **head, Node *new_node)
 {
     if (head == NULL || new_node == NULL)
     {
@@ -89,7 +89,7 @@ void cdll_append_node(node **head, node *new_node)
 
             head->prev_node == tail
         */
-        node *tail = (*head)->prev_node;
+        Node *tail = (*head)->prev_node;
 
         /*
             기존 구조:
@@ -131,7 +131,7 @@ void cdll_append_node(node **head, node *new_node)
     location == 2
     → [2] 반환
 */
-node *cdll_get_node_at(node *head, int location)
+Node *cdll_get_node_at(Node *head, int location)
 {
     // 빈 리스트 또는 잘못된 위치
     if (head == NULL || location < 0)
@@ -139,7 +139,7 @@ node *cdll_get_node_at(node *head, int location)
         return NULL;
     }
 
-    node *current = head;
+    Node *current = head;
 
     /*
         location만큼 next_node를 따라 이동한다.
@@ -171,7 +171,7 @@ node *cdll_get_node_at(node *head, int location)
 
     A ⇄ B
 */
-void cdll_remove_node(node **head, node *remove)
+void cdll_remove_node(Node **head, Node *remove)
 {
     if (head == NULL || *head == NULL || remove == NULL)
     {
@@ -238,7 +238,7 @@ void cdll_remove_node(node **head, node *remove)
 
     current ⇄ new_node ⇄ next
 */
-void cdll_insert_after(node *current, node *new_node)
+void cdll_insert_after(Node *current, Node *new_node)
 {
     if (current == NULL || new_node == NULL)
     {
@@ -282,7 +282,7 @@ void cdll_insert_after(node *current, node *new_node)
                  ↓
     tail ⇄ new_head ⇄ [0] ⇄ [1]
 */
-void cdll_insert_new_head(node **head, node *new_head)
+void cdll_insert_new_head(Node **head, Node *new_head)
 {
     if (head == NULL || new_head == NULL)
     {
@@ -304,7 +304,7 @@ void cdll_insert_new_head(node **head, node *new_head)
             기존 tail은
             head의 prev_node로 바로 찾을 수 있다.
         */
-        node *tail = (*head)->prev_node;
+        Node *tail = (*head)->prev_node;
 
         /*
             new_head를 기존 tail과 기존 head 사이에 삽입
@@ -337,7 +337,7 @@ void cdll_insert_new_head(node **head, node *new_head)
     따라서 다시 head로 돌아오면
     한 바퀴를 전부 돈 것이다.
 */
-int cdll_get_node_count(node *head)
+int cdll_get_node_count(Node *head)
 {
     // 빈 리스트
     if (head == NULL)
@@ -346,7 +346,7 @@ int cdll_get_node_count(node *head)
     }
 
     int cnt = 0;
-    node *current = head;
+    Node *current = head;
 
     do
     {
@@ -365,9 +365,9 @@ int main(void)
 {
     int i = 0;
     int count = 0;
-    node *list = NULL;
-    node *new_node = NULL;
-    node *current = NULL;
+    Node *list = NULL;
+    Node *new_node = NULL;
+    Node *current = NULL;
 
     //  노드 5개 추가
     for (i = 0; i < 5; i++)
