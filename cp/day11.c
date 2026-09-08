@@ -275,6 +275,7 @@ char * s. = cat\0lion\n;
 char **arr = 주소만저장
 
 */
+#if 0
 int main(void)
 {
     char **arr = malloc(5 * sizeof(*arr));
@@ -319,5 +320,24 @@ int main(void)
     s = NULL;
     arr = NULL;
 
+    return 0;
+}
+
+#endif
+
+int add(int a, int b)
+{
+    return (a + b);
+}
+int add2(int a, int b)
+{
+    return (a + b);
+}
+int main(void)
+{
+
+    int (*fp[5])(int, int) = {add, add2};
+    int (**fpp)(int, int) = (int (*)(int, int))malloc(5 * sizeof(*fpp));
+    int (**fpp)(int, int) = fp;
     return 0;
 }
