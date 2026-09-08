@@ -1,18 +1,24 @@
+/*
+배열로 구현 스택
+비용이큼 구현이 간단
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef int element_type;
+typedef int ElementType;
 
 typedef struct tagNode
 {
-    element_type data;
+    ElementType data;
 } Node;
 
 typedef struct tagArrayStack
 {
-    int capacity;
-    int top;
-    Node *nodes;
+    int capacity; // 용량
+    int top;      // 최상위 노드위치
+    Node *nodes;  // 노드 배열
 } ArrayStack;
 
 void as_create_stack(ArrayStack **stack, int capacity)
@@ -42,9 +48,9 @@ void as_create_stack(ArrayStack **stack, int capacity)
 
     // capacity 및 top 초기화
     (*stack)->capacity = capacity;
-    (*stack)->top = -1;
+    (*stack)->top = -1; // c언어에서 첫번쨰 배열요소를 가라키는 배열요소를 첨가가 0 이기때문에 비어있는 최상의 스택은 이보다 작아야 하기떄문에
 }
-
+// 스택제거
 void as_destroy_stack(ArrayStack *stack)
 {
     if (stack == NULL)
@@ -58,8 +64,8 @@ void as_destroy_stack(ArrayStack *stack)
     // 스택을 자유 저장소에서 해제
     free(stack);
 }
-
-void as_push(ArrayStack *stack, element_type data)
+//
+void as_push(ArrayStack *stack, ElementType data)
 {
     if (stack == NULL || stack->top + 1 >= stack->capacity)
     {
@@ -71,7 +77,7 @@ void as_push(ArrayStack *stack, element_type data)
 }
 
 // 최상위 노드의 인덱스에 있던 값을 반환한다.
-element_type as_pop(ArrayStack *stack)
+ElementType as_pop(ArrayStack *stack)
 {
     if (stack == NULL || stack->top == -1)
     {
@@ -92,7 +98,7 @@ int as_get_size(const ArrayStack *stack)
     return stack->top + 1;
 }
 
-element_type as_top(const ArrayStack *stack)
+ElementType as_top(const ArrayStack *stack)
 {
     if (stack == NULL || stack->top == -1)
     {
