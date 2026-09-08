@@ -5,25 +5,25 @@ typedef struct tag_node
 {
     char *data;
     struct tag_node *next_node;
-} node;
+} Node;
 
 typedef struct tag_linked_list_stack
 {
-    node *list;
-    node *top;
-} linked_list_stack;
+    Node *list;
+    Node *top;
+} LinkedListStack;
 
-void lls_create_stack(linked_list_stack **stack);
-void lls_destroy_stack(linked_list_stack *stack);
+void lls_create_stack(LinkedListStack **stack);
+void lls_destroy_stack(LinkedListStack *stack);
 
-node *lls_create_node(const char *new_data);
-void lls_destroy_node(node *target);
+Node *lls_create_node(const char *new_data);
+void lls_destroy_node(Node *target);
 
-void lls_push(linked_list_stack *stack, node *new_node);
-node *lls_pop(linked_list_stack *stack);
-node *lls_top(linked_list_stack *stack);
+void lls_push(LinkedListStack *stack, Node *new_node);
+Node *lls_pop(LinkedListStack *stack);
+Node *lls_top(LinkedListStack *stack);
 
-int lls_get_size(linked_list_stack *stack);
-int lls_is_empty(linked_list_stack *stack);
+int lls_get_size(LinkedListStack *stack);
+int lls_is_empty(LinkedListStack *stack);
 
 #endif

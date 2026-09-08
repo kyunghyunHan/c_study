@@ -4,19 +4,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-void lls_create_stack(linked_list_stack **stack)
+void lls_create_stack(LinkedListStack **stack)
 {
     //  스택을 자유 저장소에 생성
-    *stack = malloc(sizeof(linked_list_stack));
+    *stack = malloc(sizeof(LinkedListStack));
     (*stack)->list = NULL;
     (*stack)->top = NULL;
 }
 
-void lls_destroy_stack(linked_list_stack *stack)
+void lls_destroy_stack(LinkedListStack *stack)
 {
     while (!lls_is_empty(stack))
     {
-        node *popped = lls_pop(stack);
+        Node *popped = lls_pop(stack);
         lls_destroy_node(popped);
     }
 
@@ -24,9 +24,9 @@ void lls_destroy_stack(linked_list_stack *stack)
     free(stack);
 }
 
-node *lls_create_node(const char *new_data)
+Node *lls_create_node(const char *new_data)
 {
-    node *new_node = malloc(sizeof(node));
+    Node *new_node = malloc(sizeof(Node));
     new_node->data = malloc(strlen(new_data) + 1);
 
     strcpy(new_node->data, new_data); //  데이터를 저장한다.
@@ -36,13 +36,13 @@ node *lls_create_node(const char *new_data)
     return new_node; //  노드의 주소를 반환한다.
 }
 
-void lls_destroy_node(node *target)
+void lls_destroy_node(Node *target)
 {
     free(target->data);
     free(target);
 }
 
-void lls_push(linked_list_stack *stack, node *new_node)
+void lls_push(LinkedListStack *stack, Node *new_node)
 {
     if (stack->list == NULL)
     {
@@ -58,10 +58,10 @@ void lls_push(linked_list_stack *stack, node *new_node)
     stack->top = new_node;
 }
 
-node *lls_pop(linked_list_stack *stack)
+Node *lls_pop(LinkedListStack *stack)
 {
     //  lls_pop() 함수가 반환할 최상위 노드 저장
-    node *top_node = stack->top;
+    Node *top_node = stack->top;
 
     if (stack->list == stack->top)
     {
@@ -71,7 +71,7 @@ node *lls_pop(linked_list_stack *stack)
     else
     {
         // top 아래에 있던 노드를 새로운 current_top에 저장
-        node *current_top = stack->list;
+        Node *current_top = stack->list;
         while (current_top != NULL && current_top->next_node != stack->top)
         {
             current_top = current_top->next_node;
@@ -85,15 +85,15 @@ node *lls_pop(linked_list_stack *stack)
     return top_node;
 }
 
-node *lls_top(linked_list_stack *stack)
+Node *lls_top(LinkedListStack *stack)
 {
     return stack->top;
 }
 
-int lls_get_size(linked_list_stack *stack)
+int lls_get_size(LinkedListStack *stack)
 {
     int count = 0;
-    node *current = stack->list;
+    Node *current = stack->list;
 
     while (current != NULL)
     {
@@ -104,7 +104,7 @@ int lls_get_size(linked_list_stack *stack)
     return count;
 }
 
-int lls_is_empty(linked_list_stack *stack)
+int lls_is_empty(LinkedListStack *stack)
 {
     return stack->list == NULL;
 }
@@ -112,8 +112,8 @@ int lls_is_empty(linked_list_stack *stack)
 int main(void)
 {
     int count = 0;
-    node *popped = NULL;
-    linked_list_stack *stack = NULL;
+    Node *popped = NULL;
+    LinkedListStack *stack = NULL;
 
     lls_create_stack(&stack);
 

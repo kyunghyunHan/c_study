@@ -337,7 +337,7 @@ int main(void)
 {
 
     int (*fp[5])(int, int) = {add, add2};
-    int (**fpp)(int, int) = (int (*)(int, int))malloc(5 * sizeof(*fpp));
+    int (**fpp)(int, int) = (int (**)(int, int))malloc(5 * sizeof(*fpp));
     int (**fpp)(int, int) = fp;
     return 0;
 }
