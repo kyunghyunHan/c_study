@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#if 1
+#if 0
 typedef struct
 {
     int age;
@@ -59,6 +59,58 @@ int main(void)
     //        (*p).pf.phone,
     //        (*p).num,
     //        (*p).grade);
+    return 0;
+}
+#endif
+
+#if 1
+typedef struct Student
+{
+    int id;
+    int scores[3];
+    char name[20];
+} Student;
+
+#define size_ary(x) (sizeof(x) / sizeof((x)[0]))
+
+void input_data(Student *stu, size_t count)
+{
+    for (size_t i = 0; i < count; i++)
+    {
+        scanf("%d %d %d %d %s",
+              &(stu + i)->id,
+              &(stu + i)->scores[0],
+              &(stu + i)->scores[1],
+              &(stu + i)->scores[2],
+              (stu + i)->name);
+    }
+}
+
+void print_data(const Student *stu, size_t count)
+{
+    for (size_t i = 0; i < count; i++)
+    {
+        printf("%d %d %d %d %s\n",
+               (stu + i)->id,
+               (stu + i)->scores[0],
+               (stu + i)->scores[1],
+               (stu + i)->scores[2],
+               (stu + i)->name);
+    }
+}
+
+int main(void)
+{
+    Student stu[5] = {0};
+
+    /*
+    1 90 86 78  TOM
+    2 76 89 92 Jerry
+
+    */
+    (void)freopen("student.txt", "r", stdin);
+    input_data(stu, size_ary(stu));
+    print_data(stu, size_ary(stu));
     return 0;
 }
 #endif
