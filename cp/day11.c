@@ -174,7 +174,11 @@ int main(void)
             return 1;
         }
 
-        arr[i][strcspn(arr[i], "\n")] = '\0';
+        size_t length = strlen(arr[i]);
+        if (length > 0 && arr[i][length - 1] == '\n')
+        {
+            arr[i][length - 1] = '\0';
+        }
         current += strlen(arr[i]) + 1;
     }
 
@@ -209,7 +213,7 @@ int main(void)
 
 #endif
 
-#if 1
+#if 0
 int main(void)
 {
     char *arr[5] = {0};
@@ -266,3 +270,54 @@ int main(void)
     return 0;
 }
 #endif
+/*
+char * s. = cat\0lion\n;
+char **arr = 주소만저장
+
+*/
+int main(void)
+{
+    char **arr = malloc(5 * sizeof(*arr));
+    char *s = (char *)malloc(5 * 80);
+    size_t offset[5] = {0};
+
+    if (arr == NULL || s == NULL)
+    {
+        free(arr);
+        free(s);
+        return 1;
+    }
+    for (int i = 0; i < 5; ++i)
+    {
+        arr[i] = s;
+        gets(s);
+        s += strlen(s) + 1;
+        offset[i] = arr[i] - arr[0];
+    }
+
+    size_t used = (size_t)(s - arr[0]);
+    char *p = realloc(arr[0], used);
+    if (p == NULL)
+    {
+        free(arr[0]);
+        free(arr);
+        return 1;
+    }
+
+    /* realloc으로 주소가 바뀔 수 있으므로 offset으로 주소를 다시 저장 */
+    for (int i = 0; i < 5; ++i)
+    {
+        arr[i] = p + offset[i];
+    }
+    s = p + used;
+
+    printf("this:%c\n", *(s - 2));
+    free(arr[0]);
+    arr[0] = NULL;
+    free(arr);
+
+    s = NULL;
+    arr = NULL;
+
+    return 0;
+}
