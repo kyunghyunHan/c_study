@@ -12,6 +12,10 @@ typedef struct tagNode
 Node *dll_create_node(ElementType new_data)
 {
     Node *new_node = malloc(sizeof(Node));
+    if (new_node == NULL)
+    {
+        return NULL;
+    }
     new_node->data = new_data;
     new_node->prev_node = NULL;
     new_node->next_node = NULL;
@@ -26,6 +30,10 @@ void dll_destory_node(Node *node)
 
 void dll_append_node(Node **head, Node *new_node)
 {
+    if (head == NULL || new_node == NULL)
+    {
+        return;
+    }
     // 헤드 노드가 null 노드 아리면 새로운 노드가 head가된다
     if (*head == NULL)
     {
@@ -56,6 +64,11 @@ Node *dll_get_node_at(Node *head, int location)
 /*복잡 */
 void dll_remove_node(Node **head, Node *remove)
 {
+    if (head == NULL || *head == NULL || remove == NULL)
+    {
+        return;
+    }
+
     if ((*head) == remove)
     {
         *head = remove->next_node;
@@ -84,17 +97,26 @@ void dll_remove_node(Node **head, Node *remove)
 
 void dll_insert_after(Node *current, Node *new_node)
 {
+    if (current == NULL || new_node == NULL)
+    {
+        return;
+    }
 
     (*new_node).next_node = current->next_node;
     (*new_node).prev_node = current;
     if (current->next_node != NULL)
     {
         current->next_node->prev_node = new_node;
-        current->next_node = new_node;
     }
+    current->next_node = new_node;
 }
 void dll_insert_new_head(Node **head, Node *new_head)
 {
+    if (head == NULL || new_head == NULL)
+    {
+        return;
+    }
+
     if (*head == NULL)
     {
         *head = new_head;

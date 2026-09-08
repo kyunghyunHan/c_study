@@ -22,26 +22,33 @@ int is_number(char cipher)
 unsigned int get_next_token(char *expression, char *token, int *type)
 {
     unsigned int i = 0;
-    for (int i = 0; 0 != expression[i]; i++)
-    {
-        token[i] = expression[i];
+    unsigned int token_position = 0;
 
+    while (expression[i] != '\0')
+    {
         if (is_number(expression[i]) == 1)
         {
             *type = OPERAND;
+            if (token_position < 31)
+            {
+                token[token_position++] = expression[i];
+            }
+            i++;
 
-            if (is_number(expression[i + 1]) != 1)
+            if (is_number(expression[i]) != 1)
             {
                 break;
             }
         }
         else
         {
+            token[token_position++] = expression[i];
             *type = expression[i];
+            i++;
             break;
         }
     }
-    token[++i] = '\0';
+    token[token_position] = '\0';
     return i;
 }
 int get_priority(char operator, int in_stack)
@@ -170,8 +177,14 @@ double calculate(char *post_fix_expression)
         else
         {
             char result_string[32];
-            double operator1, operator2, temp_result;
+            double operator1, operator2, temp_result = 0.0;
             Node *operator_node;
+
+            if (lls_get_size(stack) < 2)
+            {
+                lls_destroy_stack(stack);
+                return 0.0;
+            }
 
             operator_node = lls_pop(stack);
             operator2 = atof(operator_node->data);
@@ -195,13 +208,21 @@ double calculate(char *post_fix_expression)
             case DIVIDE:
                 temp_result = operator1 / operator2;
                 break;
+            default:
+                lls_destroy_stack(stack);
+                return 0.0;
             }
-            gcvt(temp_result, 10, result_string);
+            snprintf(result_string, sizeof(result_string), "%.10g", temp_result);
             lls_push(stack, lls_create_node(result_string));
         }
     }
 
     result_node = lls_pop(stack);
+    if (result_node == NULL)
+    {
+        lls_destroy_stack(stack);
+        return 0.0;
+    }
     result = atof(result_node->data);
     lls_destroy_node(result_node);
     lls_destroy_stack(stack);
@@ -211,14 +232,17 @@ double calculate(char *post_fix_expression)
 int main(void)
 {
     char in_fix_expression[100];
-    char post_fix_expression[100];
+    char post_fix_expression[200];
 
     double result = 0.0;
     memset(in_fix_expression, 0, sizeof(in_fix_expression));
     memset(post_fix_expression, 0, sizeof(post_fix_expression));
 
     printf("Enter Infix Expression:");
-    scanf("%s", in_fix_expression);
+    if (scanf("%99s", in_fix_expression) != 1)
+    {
+        return 1;
+    }
 
     get_postfix(in_fix_expression, post_fix_expression);
     printf("infix:%s\nPostfix:%s\n", in_fix_expression, post_fix_expression);

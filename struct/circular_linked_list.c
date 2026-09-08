@@ -50,6 +50,11 @@ void cdll_destroy_node(node *target)
 */
 void cdll_append_node(node **head, node *new_node)
 {
+    if (head == NULL || new_node == NULL)
+    {
+        return;
+    }
+
     // 리스트가 비어있는 경우
     if (*head == NULL)
     {
@@ -168,7 +173,7 @@ node *cdll_get_node_at(node *head, int location)
 */
 void cdll_remove_node(node **head, node *remove)
 {
-    if (*head == NULL || remove == NULL)
+    if (head == NULL || *head == NULL || remove == NULL)
     {
         return;
     }
@@ -279,7 +284,7 @@ void cdll_insert_after(node *current, node *new_node)
 */
 void cdll_insert_new_head(node **head, node *new_head)
 {
-    if (new_head == NULL)
+    if (head == NULL || new_head == NULL)
     {
         return;
     }

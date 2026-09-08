@@ -17,11 +17,28 @@ typedef struct tagArrayStack
 
 void as_create_stack(ArrayStack **stack, int capacity)
 {
+    if (stack == NULL || capacity <= 0)
+    {
+        return;
+    }
+
+    *stack = NULL;
+
     // 스택을 자유 저장소에 생성
     *stack = malloc(sizeof(ArrayStack));
+    if (*stack == NULL)
+    {
+        return;
+    }
 
     // 입력된 capacity만큼 노드를 자유저장소에 생성
     (*stack)->nodes = malloc(sizeof(Node) * capacity);
+    if ((*stack)->nodes == NULL)
+    {
+        free(*stack);
+        *stack = NULL;
+        return;
+    }
 
     // capacity 및 top 초기화
     (*stack)->capacity = capacity;
@@ -30,6 +47,11 @@ void as_create_stack(ArrayStack **stack, int capacity)
 
 void as_destroy_stack(ArrayStack *stack)
 {
+    if (stack == NULL)
+    {
+        return;
+    }
+
     // node를 자유 저장소에서 해제
     free(stack->nodes);
 
@@ -39,6 +61,11 @@ void as_destroy_stack(ArrayStack *stack)
 
 void as_push(ArrayStack *stack, element_type data)
 {
+    if (stack == NULL || stack->top + 1 >= stack->capacity)
+    {
+        return;
+    }
+
     stack->top++;
     stack->nodes[stack->top].data = data;
 }
@@ -46,23 +73,38 @@ void as_push(ArrayStack *stack, element_type data)
 // 최상위 노드의 인덱스에 있던 값을 반환한다.
 element_type as_pop(ArrayStack *stack)
 {
+    if (stack == NULL || stack->top == -1)
+    {
+        return 0;
+    }
+
     int position = stack->top--;
     return stack->nodes[position].data;
 }
 
 int as_get_size(const ArrayStack *stack)
 {
+    if (stack == NULL)
+    {
+        return 0;
+    }
+
     return stack->top + 1;
 }
 
 element_type as_top(const ArrayStack *stack)
 {
+    if (stack == NULL || stack->top == -1)
+    {
+        return 0;
+    }
+
     return stack->nodes[stack->top].data;
 }
 
 int as_is_empty(const ArrayStack *stack)
 {
-    return stack->top == -1;
+    return stack == NULL || stack->top == -1;
 }
 
 int main(void)
@@ -71,6 +113,10 @@ int main(void)
     ArrayStack *stack = NULL;
 
     as_create_stack(&stack, 10);
+    if (stack == NULL)
+    {
+        return 1;
+    }
 
     as_push(stack, 3);
     as_push(stack, 37);

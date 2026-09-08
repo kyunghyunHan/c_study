@@ -6,14 +6,31 @@
 
 void lls_create_stack(LinkedListStack **stack)
 {
+    if (stack == NULL)
+    {
+        return;
+    }
+
+    *stack = NULL;
+
     //  스택을 자유 저장소에 생성
     *stack = malloc(sizeof(LinkedListStack));
+    if (*stack == NULL)
+    {
+        return;
+    }
+
     (*stack)->list = NULL;
     (*stack)->top = NULL;
 }
 
 void lls_destroy_stack(LinkedListStack *stack)
 {
+    if (stack == NULL)
+    {
+        return;
+    }
+
     while (!lls_is_empty(stack))
     {
         Node *popped = lls_pop(stack);
@@ -26,8 +43,23 @@ void lls_destroy_stack(LinkedListStack *stack)
 
 Node *lls_create_node(const char *new_data)
 {
+    if (new_data == NULL)
+    {
+        return NULL;
+    }
+
     Node *new_node = malloc(sizeof(Node));
+    if (new_node == NULL)
+    {
+        return NULL;
+    }
+
     new_node->data = malloc(strlen(new_data) + 1);
+    if (new_node->data == NULL)
+    {
+        free(new_node);
+        return NULL;
+    }
 
     strcpy(new_node->data, new_data); //  데이터를 저장한다.
 
@@ -38,12 +70,22 @@ Node *lls_create_node(const char *new_data)
 
 void lls_destroy_node(Node *target)
 {
+    if (target == NULL)
+    {
+        return;
+    }
+
     free(target->data);
     free(target);
 }
 
 void lls_push(LinkedListStack *stack, Node *new_node)
 {
+    if (stack == NULL || new_node == NULL)
+    {
+        return;
+    }
+
     if (stack->list == NULL)
     {
         stack->list = new_node;
@@ -60,6 +102,11 @@ void lls_push(LinkedListStack *stack, Node *new_node)
 
 Node *lls_pop(LinkedListStack *stack)
 {
+    if (stack == NULL || lls_is_empty(stack))
+    {
+        return NULL;
+    }
+
     //  lls_pop() 함수가 반환할 최상위 노드 저장
     Node *top_node = stack->top;
 
@@ -79,7 +126,10 @@ Node *lls_pop(LinkedListStack *stack)
 
         // current_top을 top에 저장
         stack->top = current_top;
-        stack->top->next_node = NULL;
+        if (stack->top != NULL)
+        {
+            stack->top->next_node = NULL;
+        }
     }
 
     return top_node;
@@ -106,7 +156,7 @@ int lls_get_size(LinkedListStack *stack)
 
 int lls_is_empty(LinkedListStack *stack)
 {
-    return stack->list == NULL;
+    return stack == NULL || stack->list == NULL;
 }
 #if 0
 int main(void)

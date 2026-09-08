@@ -31,6 +31,11 @@ void sll_destory_node(Node *node)
 
 void sll_append_node(Node **head, Node *new_node)
 {
+    if (head == NULL || new_node == NULL)
+    {
+        return;
+    }
+
     // 헤드 노드가 null 노드 아리면 새로운 노드가 head가된다
     if (*head == NULL)
     {
@@ -58,6 +63,11 @@ Node *sll_get_node_at(Node *head, int location)
 }
 void sll_remove_node(Node **head, Node *remove)
 {
+    if (head == NULL || *head == NULL || remove == NULL)
+    {
+        return;
+    }
+
     if ((*head) == remove)
     {
         *head = remove->next_node;
@@ -78,11 +88,21 @@ void sll_remove_node(Node **head, Node *remove)
 
 void sll_insert_after(Node *current, Node *new_node)
 {
+    if (current == NULL || new_node == NULL)
+    {
+        return;
+    }
+
     (*new_node).next_node = current->next_node;
     current->next_node = new_node;
 }
 void sll_insert_new_head(Node **head, Node *new_head)
 {
+    if (head == NULL || new_head == NULL)
+    {
+        return;
+    }
+
     if ((*head) == NULL)
     {
         (*head) = new_head;
