@@ -24,7 +24,7 @@ int input_data(Student **stu)
     {
         Student *sp = *stu + i;
         ip = sp->score;
-        if (scanf("%d %d %d %d %19s", &(sp->id), ip, ip + 1, ip + 2, sp->name) != 5)
+        if (scanf("%d %d %d %d %19s", &(sp->id), (*sp).score, (*sp).score + 1, (*sp).score + 2, sp->name) != 5)
             break;
         count++;
     }
