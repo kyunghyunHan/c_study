@@ -257,25 +257,83 @@ int main(void)
     return 0;
 }
 #endif
+#if 0
 
-#if 1
 typedef char (*CARY)[10];
+typedef int (*PRINT_FN)(CARY, int);
+
 int printAry(CARY ary, int size)
 {
-    int i;
-    for (i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
         printf("%s ", ary[i]);
     }
+
     printf("\n");
+    return 0;
 }
 
 int main(void)
 {
     char fruit[][10] = {"apple", "melon", "cherry"};
-    int (*fn)(CARY, int size);
+
+    PRINT_FN fn;
     fn = printAry;
     fn(fruit, sizeof(fruit) / sizeof(fruit[0]));
+
+    return 0;
+}
+#endif
+
+#if 0
+int func(int a, int b)
+{
+    return a + b;
+}
+int main(void)
+{
+    int a = (int)func;
+
+    printf("%d\n", func(3, 4));
+    int b = ((int (*)(int, int))a)(3, 4);
+    printf("%d\n", b);
+    return 0;
+}
+#endif
+
+#if 0
+typedef int (*FP)(int, int);
+
+int func(int a, int b)
+{
+    return a + b;
+}
+
+int main(void)
+{
+    int a = (int)func;
+
+    // printf("%d\n", func(3, 4));
+
+    int b = ((FP)a)(3, 4);
+
+    printf("%d\n", b);
+
+    return 0;
+}
+
+#endif
+
+#if 1
+int main(void)
+{
+    uintptr_t a;
+    int arr[5] = {1, 2, 3, 4, 5};
+
+    // 8바이트 주소를 int에 넣어서 오류남
+    // a = (int)arr;
+    a = (uintptr_t)arr;
+    printf("%d\n", ((int *)a)[2]);
     return 0;
 }
 #endif
