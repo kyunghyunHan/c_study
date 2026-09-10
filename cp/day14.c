@@ -232,6 +232,15 @@ void binary(int n)
     binary(n / 2);
     printf("%d ", n % 2);
 }
+void func05(int l)
+{
+    if (l > N)
+        return;
+    printf("%d ", l);
+    func05(l + 1);
+    printf("%d ", l);
+}
+
 void func04(int l)
 {
     if (l > N)
@@ -251,7 +260,7 @@ int main(void)
     }
     else
     {
-        binary(10);
+        func05(1);
     }
 
     return 0;
