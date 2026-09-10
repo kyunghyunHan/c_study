@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <setjmp.h>
+
 #include <stdlib.h>
 #if 0
 #ifdef __APPLE__
@@ -140,7 +142,7 @@ union secondary{
 };
 #endif
 
-#if 1
+#if 0
 #include <stdio.h>
 #include <assert.h>
 #define NDEBOG
@@ -165,7 +167,93 @@ char * const * (*next) ()
     next는 char을 가리키는 가리키는 상수 포인터에 대한 포인터를 반환하는 함수 포인터
 
 */
-
 /*
 c 는 char을 가리키는 포인터를 반환하고 매개변수를 이중포인터를 받는 함수의 포인터를 10개 저장하는 배열
 */
+
+#if 0
+int *func(void)
+{
+    static int a[] = {100, 200, 300};
+    return &a;
+}
+typedef char *(*(*FP)())[10];
+void main(void)
+{
+    int *(*fp)(void) = func;
+    // int *를 반환하는 함수의 포인터
+    int *(**fpp)(void) = &fp;
+    // int * 를 반환하는 함수의 포인터를 가리키는 포인터
+    printf("%d\n", fp()[0]);
+    // fp 에서 반환한 int 포인터의 첫번쨰 원소
+    printf("%d\n", (*fpp)()[0]);
+    // fp 에서 반환한 int 포인터의 첫번쨰 원소
+    char i = 0;
+    // char *(*(*var)())[10];
+
+    FP var = (FP)func;
+    // war은 char*[10]를 가리키는 포인터를 반환하는 함수포인터
+}
+
+int arr[] = {100};
+extern arr2[] = {100};
+#endif
+jmp_buf buf;
+
+#if 1
+void func03(int l)
+{
+    if (l > 5)
+    {
+        longjmp(buf, 1);
+    }
+    printf("%d\n", l);
+    func03(l + 1);
+}
+
+void func02(int l)
+{
+    int arr[10] = {0};
+    printf("%d\n", l);
+    func02(l + 1);
+}
+void func(void)
+{
+    func();
+}
+// N이 5인경우 func04(1)을 사용해서 5 4 3  2 1푸렭
+int N = 5;
+void binary(int n)
+{
+    if (n == 0)
+    {
+        return;
+    }
+    binary(n / 2);
+    printf("%d ", n % 2);
+}
+void func04(int l)
+{
+    if (l > N)
+        return;
+
+    func04(l + 1);
+    printf("%d ", l);
+}
+
+int main(void)
+{
+
+    // unsigned int _sktlen = 0x4000; /*16k스택 */
+    setjmp(buf);
+    if (setjmp(buf))
+    {
+    }
+    else
+    {
+        binary(10);
+    }
+
+    return 0;
+}
+#endif
