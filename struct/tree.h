@@ -14,6 +14,7 @@ typedef struct LcrNode
 
 } LcrNode;
 
+
 LcrNode *lcrs_create_node(ElementType new_data);
 
 void lcrs_destroy_node(LcrNode *node);
