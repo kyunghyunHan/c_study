@@ -1,3 +1,4 @@
+.DS_Store
 *.out
 *.o
 *.exe
@@ -6,3 +7,8 @@ video.mov
 *.ppm
 /.vscode
 *.txt
+
+# Extensionless binaries created by the current examples
+/sandbox/test
+/systems/kernel/kernel
+/systems/kernel201/kernel
