@@ -213,25 +213,24 @@ void func03(int l)
 
 void func02(int l)
 {
+    if (l > 5)
+        return;
+
     int arr[10] = {0};
-    printf("%d\n", l);
+    arr[0] = l;
+    printf("%d\n", arr[0]);
     func02(l + 1);
 }
-void func(void)
+void func(int l)
 {
-    func();
+    if (l > 5)
+        return;
+
+    func(l + 1);
 }
 // N이 5인경우 func04(1)을 사용해서 5 4 3  2 1푸렭
 int N = 5;
-void binary(int n)
-{
-    if (n == 0)
-    {
-        return;
-    }
-    binary(n / 2);
-    printf("%d ", n % 2);
-}
+
 void func05(int l)
 {
     if (l > N)
@@ -240,28 +239,364 @@ void func05(int l)
     func05(l + 1);
     printf("%d ", l);
 }
+void func06(int l)
+{
+    if (l > N)
+        return;
+    printf("%d", l);
+    func06(l + 1);
+    if (l < N)
+        printf("%d", l);
+}
+void func07(int l)
+{
+    if (l > N)
+        return;
+    printf("%d", l);
+    func07(l + 1);
+    printf("%d", N - l + 1);
+}
+void func08(int l)
+{
+    if (l > N)
+        return;
+    printf("%d", l);
+    func08(l + 1);
+    printf("%d", l);
+}
 
-void func04(int l)
+void func09(int l)
 {
     if (l > N)
         return;
 
-    func04(l + 1);
-    printf("%d ", l);
+    for (int i = 0; i < l; i++)
+    {
+        printf("*");
+    }
+    printf("\n");
+    func09(l + 1);
+}
+
+static int row = 1;
+static int col = 0;
+
+void func091(int l)
+{
+    if (row > N)
+        return;
+
+    if (col < row)
+    {
+        printf("*");
+        col++;
+        func091(l + 1);
+    }
+    else
+    {
+        printf("\n");
+        row++;
+        col = 0;
+        func091(l + 1);
+    }
+}
+
+void binary(int n, int bit)
+{
+    if (bit < 0)
+        return;
+
+    binary(n, bit - 1);
+
+    printf("%d ", (n >> bit) & 1);
+}
+
+void func10(int n)
+{
+    if (n < 0)
+        return;
+
+    func10(n - 1);
+
+    printf("%d : ", n);
+    binary(n, 2); // 2,1,0 → 총 3비트
+    printf("\n");
+}
+int arr[3];
+
+void func11(int L)
+{
+    if (L == 3)
+    {
+        printf("%d %d %d\n", arr[0], arr[1], arr[2]);
+        return;
+    }
+
+    arr[L] = 1; // row
+    func11(L + 1);
+
+    arr[L] = 2;
+    func11(L + 1);
+
+    arr[L] = 3;
+    func11(L + 1);
+    arr[L] = 4;
+    func11(L + 1);
+}
+
+void func12(int L)
+{
+    if (L == 3)
+    {
+        printf("%d %d %d\n", arr[0], arr[1], arr[2]);
+        return;
+    }
+    for (int i = 1; i <= 3; i++)
+    {
+        printf("%d %d %d\n", arr[0], arr[1], arr[2]);
+
+        if ((L < 1 || arr[0] != i) &&
+            (L < 2 || arr[1] != i))
+        {
+            arr[L] = i;
+            func12(L + 1);
+        }
+    }
+}
+int vec[2];
+void func13(int L)
+{
+    if (L == 2)
+    {
+        printf("%d %d\n", vec[0], vec[1]);
+        return;
+    }
+    for (int i = 1; i <= 6; i++)
+    {
+        vec[L] = i; // row
+        func13(L + 1);
+    }
+}
+enum
+{
+    PICK_COUNT = 3,
+    NUMBER_MAX = 6,
+    TARGET_SUM = 10
+};
+
+int used[10] = {0};
+int data[PICK_COUNT] = {0};
+void func14(int L)
+{
+    if (L == 3)
+    {
+        printf("%d %d %d\n", data[0], data[1], data[2]);
+        return;
+    }
+    for (int i = 0; i < 5; i++)
+    {
+        if (used[i] == 0)
+        {
+            used[i] = 1;
+            data[L] = i + 1;
+            func14(L + 1);
+            used[i] = 0;
+        }
+    }
+}
+
+typedef struct Node
+{
+    struct Node *left;
+    struct Node *middle;
+    struct Node *right;
+    int data;
+} Node;
+
+Node *create_node(int data)
+{
+    Node *new_node = malloc(sizeof(Node));
+
+    new_node->data = data;
+    new_node->left = NULL;
+    new_node->middle = NULL;
+    new_node->right = NULL;
+
+    return new_node;
+}
+
+void func15(Node *root, int L)
+{
+    if (L == 3)
+    {
+        // printf("%d %d %d\n", data[0], data[1], data[2]);
+        return;
+    }
+
+    // 1 선택
+    root->left = create_node(1);
+    printf("%d ", root->left->data);
+    data[L] = 1;
+    func15(root->left, L + 1);
+    printf("\n");
+
+    // 2 선택
+    root->middle = create_node(2);
+    printf("%d ", root->middle->data);
+    data[L] = 2;
+    func15(root->middle, L + 1);
+
+    // 3 선택
+    root->right = create_node(3);
+    printf("%d ", root->right->data);
+    data[L] = 3;
+    func15(root->right, L + 1);
+}
+void test04(void)
+{
+    int local_used[10] = {0};
+
+    for (int i = 1; i <= 3; i++)
+    {
+        if (local_used[i] == 1)
+        {
+            continue;
+        }
+        local_used[i] = 1;
+        for (int j = 1; j <= 3; j++)
+        {
+            if (local_used[j] == 1)
+            {
+                continue;
+            }
+            local_used[j] = 1;
+            for (int k = 1; k <= 3; k++)
+            {
+                if (local_used[k] == 1)
+                {
+                    continue;
+                }
+                local_used[k] = 1;
+                printf("%d %d %d\n", i, j, k);
+                local_used[k] = 0;
+            }
+            local_used[j] = 0;
+        }
+        local_used[i] = 0;
+    }
+}
+/* 1~6 중 세 숫자를 선택해 합이 10인 경우를 출력한다. */
+void print_data(void)
+{
+    for (int i = 0; i < PICK_COUNT; i++)
+    {
+        printf("%d%c", data[i], i == PICK_COUNT - 1 ? '\n' : ' ');
+    }
+}
+
+/* 중복 선택 허용 */
+void test05(int depth, int sum)
+{
+    if (depth == PICK_COUNT)
+    {
+        if (sum == TARGET_SUM)
+        {
+            print_data();
+        }
+        return;
+    }
+
+    for (int number = 1; number <= NUMBER_MAX; number++)
+    {
+        data[depth] = number;
+        test05(depth + 1, sum + number);
+    }
+}
+
+/* 같은 숫자의 중복 선택 금지 */
+void test06(int depth)
+{
+    if (depth == PICK_COUNT)
+    {
+        int sum = data[0] + data[1] + data[2];
+
+        if (sum == TARGET_SUM)
+        {
+            print_data();
+        }
+        return;
+    }
+
+    for (int number = 1; number <= NUMBER_MAX; number++)
+    {
+        int index = number - 1;
+
+        if (used[index] == 1)
+        {
+            continue;
+        }
+
+        used[index] = 1;
+        data[depth] = number;
+        test06(depth + 1);
+        used[index] = 0;
+    }
+}
+
+int count = 0;
+
+/* test06처럼 중복을 막고, 현재 합과 함수 호출 횟수도 함께 관리한다. */
+void test07(int depth, int sum)
+{
+    count++;
+
+    if (depth == PICK_COUNT)
+    {
+        if (sum == TARGET_SUM)
+        {
+            print_data();
+        }
+        return;
+    }
+
+    for (int number = 1; number <= NUMBER_MAX; number++)
+    {
+        int index = number - 1;
+
+        if (used[index] == 1)
+        {
+            continue;
+        }
+
+        used[index] = 1;
+        data[depth] = number;
+        test07(depth + 1, sum + number);
+        used[index] = 0;
+    }
+}
+
+/* 중복 선택을 허용하며, 현재 합을 재귀 호출로 전달한다. */
+void func21(int depth, int sum)
+{
+    if (depth == PICK_COUNT)
+    {
+        if (sum == TARGET_SUM)
+        {
+            print_data();
+        }
+        return;
+    }
+
+    for (int number = 1; number <= NUMBER_MAX; number++)
+    {
+        data[depth] = number;
+        func21(depth + 1, sum + number);
+    }
 }
 
 int main(void)
 {
-
-    // unsigned int _sktlen = 0x4000; /*16k스택 */
-    setjmp(buf);
-    if (setjmp(buf))
-    {
-    }
-    else
-    {
-        func05(1);
-    }
+    func21(0, 0);
 
     return 0;
 }
