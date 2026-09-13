@@ -134,10 +134,60 @@ void test07(int l, int sum)
         test07(l + 1, sum + i);
     }
 }
+/*중복금지  */
+void test08(int l)
+{
+    if (l == PICK_COUNT)
+    {
+        printf("%d %d %d\n", arr[0], arr[1], arr[2]);
 
+        return;
+    }
+
+    for (int i = 1; i <= NUMBER_MAX; i++)
+    {
+        // if (arr[l] == arr[l + 1])
+        // {
+        //     continue;
+        // }
+        if (l == 0 && arr[l] == arr[l + 1] && arr[l + 2] == arr[l])
+        {
+            continue;
+        }
+        arr[l] = i;
+        test08(l + 1);
+    }
+}
+
+/*자리수를 뒤집어서 */
+void test09(int n)
+{
+    printf("%d", n % 10);
+    if (n / 10 == 0)
+    {
+        return;
+    }
+    test09(n / 10);
+    // 여기를 구현
+}
+/*12345구현 */
+void test10(int n)
+{
+
+    if (n / 10 <= 0)
+    {
+        printf("%d", n);
+
+        return;
+    }
+    test10(n / 10);
+    printf("%d", n % 10);
+
+    // 여기를 구현
+}
 int main(void)
 {
-    test07(0, 0);
+    test10(12345);
 
     return 0;
 }
