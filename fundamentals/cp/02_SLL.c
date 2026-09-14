@@ -2,9 +2,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+/*
 
-nodeSLL *Create_nodeSLL(data_t *data)
+*/
+nodeSLL *create_nodeSLL(data_t *data)
 {
+#if 0
+    nodeSLL *newnode = NULL;
+    newnode = (nodeSLL *)calloc(1, sizeof(nodeSLL));
+    if (newnode != NULL)
+        newnode->data = *data;
+    return newnode;
+#endif
     nodeSLL *newnode = NULL;
     newnode = (nodeSLL *)calloc(1, sizeof(nodeSLL));
     if (newnode != NULL)
@@ -12,23 +21,55 @@ nodeSLL *Create_nodeSLL(data_t *data)
     return newnode;
 }
 
+void append_nodeSLL(nodeSLL *head, nodeSLL *newnode)
+{
+    for (; head->next != NULL; head = head->next)
+        ;
+
+    head->next = newnode;
+}
+#if 0
 void Append_nodeSLL(nodeSLL *head, nodeSLL *newnode)
 {
-    nodeSLL *curr = head;
-    for (; curr->next != NULL; curr = curr->next)
+    // nodeSLL *curr = head;
+    // for (; curr->next != NULL; curr = curr->next)
+    //     ;
+    for (; head->next != NULL; head = head->next)
         ;
-    curr->next = newnode;
+
+    head->next = newnode;
+    // curr->next = newnode;
+    return;
+}
+#endif
+
+void print_nodeSLL(nodeSLL *head)
+{
+    // nodeSLL *curr = head;
+    // for (; curr != NULL; curr = curr->next)
+    // {
+    //     printf("%d %d\n", curr->data.id, curr->data.score);
+    // }
+    for (; head != NULL; head = head->next)
+    {
+        printf("%d %d\n", head->data.id, head->data.score);
+    }
     return;
 }
 
-void Print_nodeSLL(nodeSLL *head)
+// void destroy_list(nodeSLL *node)
+// {
+//     free(node);
+// }
+
+void destroy_list(nodeSLL *head)
 {
-    nodeSLL *curr = head;
-    for (; curr != NULL; curr = curr->next)
+    while (head != NULL)
     {
-        printf("%d %d\n", curr->data.id, curr->data.score);
+        nodeSLL *next = head->next;
+        free(head);
+        head = next;
     }
-    return;
 }
 // bool sll_push_front(NodeSLL **head, int data)
 // {

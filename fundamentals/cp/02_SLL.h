@@ -16,7 +16,8 @@ typedef struct nodeSLL
     struct nodeSLL *next;
 } nodeSLL;
 
-nodeSLL *Create_nodeSLL(data_t *data);
-void Append_nodeSLL(nodeSLL *head, nodeSLL *newnode);
-void Print_nodeSLL(nodeSLL *head);
+nodeSLL *create_nodeSLL(data_t *data);
+void append_nodeSLL(nodeSLL *head, nodeSLL *newnode);
+void print_nodeSLL(nodeSLL *head);
+void destroy_list(nodeSLL *head);
 #endif
