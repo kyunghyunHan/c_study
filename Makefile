@@ -19,5 +19,14 @@ dll:
 dll-run: dll
 	./test
 
+
+greed:
+	$(CC) $(CFLAGS) \
+	./algorithms/greed/exam01.c \
+	-o test
+
+greed-run: greed
+	./test
+
 clean:
 	rm -f test
