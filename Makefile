@@ -45,5 +45,14 @@ prob:
 prob-run: prob
 	./test
 
+heap:
+	$(CC) $(CFLAGS) \
+	./algorithms/struct/heap.c \
+	./algorithms/struct/test_heap.c \
+	-o test
+
+heap-run: heap
+	./test
+
 clean:
 	rm -f test
