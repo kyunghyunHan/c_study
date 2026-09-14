@@ -19,7 +19,7 @@ typedef struct tagNode
 
 void init_HT(Node **head, Node **tail);
 
-
 Node *create_node(data_t *data);
-
+void append_node(Node **head, Node *new_node);
+void print_node(Node *head);
 #endif /* DLL_H */
