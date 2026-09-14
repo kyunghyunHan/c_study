@@ -3,38 +3,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-NodeSLL *sll_create_node(data_t *data)
+nodeSLL *Create_nodeSLL(data_t *data)
 {
-    NodeSLL *new_node = calloc(1, sizeof(NodeSLL));
-
-    if (new_node != NULL)
-    {
-        new_node->data = *data;
-    }
-
-    return new_node;
+    nodeSLL *newnode = NULL;
+    newnode = (nodeSLL *)calloc(1, sizeof(nodeSLL));
+    if (newnode != NULL)
+        newnode->data = *data;
+    return newnode;
 }
 
-void sll_append_node(NodeSLL **head, NodeSLL *new_node)
+void Append_nodeSLL(nodeSLL *head, nodeSLL *newnode)
 {
-    if (*head == NULL)
-    {
-        *head = new_node;
-    }
-    else
-    {
-        NodeSLL *tail = *head;
-        // for (NodeSLL *tail = *head; tail->next_node != NULL; tail = tail->next_node)
+    nodeSLL *curr = head;
+    for (; curr->next != NULL; curr = curr->next)
         ;
-        while ((tail->next_node) != NULL)
-        {
-            tail = (*tail).next_node;
-        }
-
-        (*tail).next_node = new_node;
-    }
+    curr->next = newnode;
+    return;
 }
 
+void Print_nodeSLL(nodeSLL *head)
+{
+    nodeSLL *curr = head;
+    for (; curr != NULL; curr = curr->next)
+    {
+        printf("%d %d\n", curr->data.id, curr->data.score);
+    }
+    return;
+}
 // bool sll_push_front(NodeSLL **head, int data)
 // {
 //     NodeSLL *node;

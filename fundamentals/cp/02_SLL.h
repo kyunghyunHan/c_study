@@ -3,21 +3,20 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
+
 typedef struct _data
 {
     int id;
     int score;
 } data_t;
-typedef struct NodeSLL
+typedef struct nodeSLL
 {
     data_t data;
-    struct NodeSLL *next_node;
-} NodeSLL;
+    struct nodeSLL *next;
+} nodeSLL;
 
-NodeSLL *sll_create_node(data_t *data);
-void sll_append_node()
-{
-}
-
-
+nodeSLL *Create_nodeSLL(data_t *data);
+void Append_nodeSLL(nodeSLL *head, nodeSLL *newnode);
+void Print_nodeSLL(nodeSLL *head);
 #endif
