@@ -12,8 +12,8 @@ sll-run: sll
 
 dll:
 	$(CC) $(CFLAGS) \
-	./fundamentals/cp/03_DLL_main.c \
-	./fundamentals/cp/03_DLL.c \
+	./fundamentals/cp/02_dll_main.c \
+	./fundamentals/cp/02_dll.c \
 	-o test
 
 dll-run: dll
@@ -26,6 +26,23 @@ greed:
 	-o test
 
 greed-run: greed
+	./test
+
+
+conq:
+	$(CC) $(CFLAGS) \
+	./algorithms/Conquer/exam01.c \
+	-o test
+
+conq-run: conq
+	./test
+
+prob:
+	$(CC) $(CFLAGS) \
+	./fundamentals/problem/a01.c \
+	-o test
+
+prob-run: prob
 	./test
 
 clean:

@@ -71,6 +71,9 @@ void destroy_list(nodeSLL *head)
         head = next;
     }
 }
+nodeSLL * init_headSLL(nodeSLL *head){
+    
+}
 // bool sll_push_front(NodeSLL **head, int data)
 // {
 //     NodeSLL *node;
