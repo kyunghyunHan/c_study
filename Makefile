@@ -1,14 +1,23 @@
 CC = gcc
 CFLAGS = -Wall -Wextra
 
-TARGET = test
-SRC = ./fundamentals/cp/02_SLL_main.c ./fundamentals/cp/02_SLL.c
+sll:
+	$(CC) $(CFLAGS) \
+	./fundamentals/cp/02_SLL_main.c \
+	./fundamentals/cp/02_SLL.c \
+	-o test
 
-all:
-	$(CC) $(CFLAGS) $(SRC) -o $(TARGET)
+sll-run: sll
+	./test
 
-run: all
-	./$(TARGET)
+dll:
+	$(CC) $(CFLAGS) \
+	./fundamentals/cp/03_DLL_main.c \
+	./fundamentals/cp/03_DLL.c \
+	-o test
+
+dll-run: dll
+	./test
 
 clean:
-	rm -f $(TARGET)
+	rm -f test
