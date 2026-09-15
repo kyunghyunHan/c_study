@@ -18,7 +18,14 @@ dll:
 
 dll-run: dll
 	./test
+cll:
+	$(CC) $(CFLAGS) \
+	./fundamentals/cp/02_cll_main.c \
+	./fundamentals/cp/02_cll.c \
+	-o test
 
+cll-run: cll
+	./test
 
 greed:
 	$(CC) $(CFLAGS) \
@@ -53,6 +60,23 @@ heap:
 
 heap-run: heap
 	./test
+	
+rbt:
+	$(CC) $(CFLAGS) \
+	./algorithms/struct/rbt.c \
+	./algorithms/struct/test_rbt.c \
+	-o test
 
+rbt-run: rbt
+	./test
+
+pq:
+	$(CC) $(CFLAGS) \
+	./algorithms/struct/priority_queue.c \
+	./algorithms/struct/test_priority_queue.c \
+	-o test
+
+pq-run: rbt
+	./test
 clean:
 	rm -f test

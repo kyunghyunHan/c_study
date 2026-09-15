@@ -50,6 +50,8 @@ typedef struct tagLinkedList
     처음 생성된 노드는 아직 리스트에 연결되지 않았으므로
     prev_node와 next_node는 NULL로 초기화한다.
 */
+void init(Node **head);
+void print_node(Node *head);
 Node *create_node(data_t new_data);
 void destroy_node(Node *target);
 void append_node(Node **head, Node *new_node);

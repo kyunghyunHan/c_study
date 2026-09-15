@@ -1,9 +1,5 @@
 #include "02_cll.h"
-/*
-init tail 삭제
 
-
-*/
 int main(void)
 {
     Node *head = NULL;
@@ -20,28 +16,13 @@ int main(void)
         new_node = create_node(data);
         if (new_node == NULL)
         {
+            destroy_dll(&head);
             head = NULL;
             exit(0);
         }
+        append_node(&head, new_node);
     }
-    
-    // while (fscanf(input, "%d %d", &data.id, &data.score) == 2)
-    // {
-    //     Node *new_node = NULL;
+    print_node(head);
 
-    //     new_node = create_node(&data);
-    //     if (new_node == NULL)
-    //     {
-    //         destroy_dll(&head);
-    //         head = NULL;
-    //         tail = NULL;
-    //         exit(0);
-    //     }
-    //     append_node(&head, new_node);
-    // }
-    // print_node(head);
-
-
-    
     return 0;
 }
