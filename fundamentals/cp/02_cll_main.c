@@ -1,12 +1,15 @@
 #include "02_cll.h"
+/*
+init tail 삭제
 
+
+*/
 int main(void)
 {
     Node *head = NULL;
-    Node *tail = NULL;
-    init(&head, &tail);
+    init(&head);
 
-    data_t data = {0};
+    data_t data = {0, 0};
     int n;
     (void)freopen("data.txt", "r", stdin);
     (void)scanf("%d", &n);
@@ -14,7 +17,12 @@ int main(void)
     {
         Node *new_node = NULL;
         (void)scanf("%d %d", &data.id, &data.score);
-        new_node = create_node(&data);
+        new_node = create_node(data);
+        if (new_node == NULL)
+        {
+            head = NULL;
+            exit(0);
+        }
     }
     // // FILE *input = fopen("data.txt", "r");
 

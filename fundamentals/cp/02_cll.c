@@ -1,22 +1,14 @@
 #include "02_cll.h"
 
-void init(Node **head, Node **tail)
+void init(Node **head)
 {
     *head = (Node *)calloc(1, sizeof(Node));
     if (*head == NULL)
     {
         return;
     }
-    *tail = (Node *)calloc(1, sizeof(Node));
-    if (*tail == NULL)
-    {
-        free(*head);
-        *head = NULL;
-
-        return;
-    }
-    (**head).next = *tail;
-    (**tail).prev = *head;
+    (**head).next = *head;
+    (**head).prev = *head;
 }
 
 Node *create_node(data_t new_data)
@@ -33,4 +25,19 @@ Node *create_node(data_t new_data)
     new_node->next = NULL;
 
     return new_node;
+}
+void cdll_append_node(Node *head, Node *new_node)
+{
+    if (head == NULL || new_node == NULL)
+    {
+        return;
+    }
+
+    Node *tail = head->prev;
+
+    tail->next = new_node;
+    new_node->prev = tail;
+
+    new_node->next = head;
+    head->prev = new_node;
 }
