@@ -37,11 +37,18 @@ void append_node(Node **head, Node *new_node)
     if (head == NULL || *head == NULL || new_node == NULL)
         return;
 
-    Node *tail = (*head)->prev;
-    tail->next = new_node;
-    new_node->prev = tail;
-    new_node->next = *head;
-    (*head)->prev = new_node;
+    insert_after((*head)->prev, new_node);
+}
+
+void insert_after(Node *current, Node *new_node)
+{
+    if (current == NULL || new_node == NULL)
+        return;
+
+    new_node->prev = current;
+    new_node->next = current->next;
+    current->next->prev = new_node;
+    current->next = new_node;
 }
 
 void print_node(Node *head)
@@ -52,13 +59,17 @@ void print_node(Node *head)
     Node *current = head->next;
     while (current != head)
     {
-        printf("%d %d\n", current->data.id, current->data.score);
+        putchar(current->data.ch);
         current = current->next;
     }
+    putchar('\n');
 }
 
-void destroy_node(Node **head)
+void destroy_list(Node **head)
 {
+    if (head == NULL || *head == NULL)
+        return;
+
     Node *current = (*head)->next;
 
     while (current != *head)
@@ -73,14 +84,14 @@ void destroy_node(Node **head)
     *head = NULL;
 }
 
-Node *get_node(Node *head, int index)
+void remove_node(Node *target)
 {
-    Node *current = head;
-    while (index > 0)
-    {
-        current = current->next;
-        index--;
-    }
-    return current;
-}
+    if (target == NULL)
+        return;
 
+    target->prev->next = target->next;
+    target->next->prev = target->prev;
+    target->prev = NULL;
+    target->next = NULL;
+    free(target);
+}

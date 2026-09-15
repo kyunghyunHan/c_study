@@ -1,16 +1,14 @@
-#ifndef __02_CLL_H__
-#define __02_CLL_H__
+#ifndef CLL_02_H
+#define CLL_02_H
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "02_cll.h"
 
 #define SIZE(a) (sizeof(a) / sizeof((a)[0]))
 typedef struct data
 {
-    int id;
-    int score;
+    char ch;
 } data_t;
 typedef struct Node
 {
@@ -53,12 +51,9 @@ typedef struct tagLinkedList
 void init(Node **head);
 void print_node(Node *head);
 Node *create_node(data_t new_data);
-void destroy_node(Node *target);
+void destroy_list(Node **head);
 void append_node(Node **head, Node *new_node);
-Node *get_node_at(Node *head, int location);
-void remove_node(Node **head, Node *remove);
+void remove_node(Node *target);
 void insert_after(Node *current, Node *new_node);
-void insert_new_head(Node **head, Node *new_head);
-int get_node_count(Node *head);
 
 #endif

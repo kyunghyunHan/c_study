@@ -78,5 +78,25 @@ pq:
 
 pq-run: rbt
 	./test
+
+sht:
+	$(CC) $(CFLAGS) \
+	./algorithms/struct/simple_hash_table.c \
+	./algorithms/struct/test_simple_hash_table.c \
+	-o test
+
+sht-run: sht
+	./test
+
+.PHONY: test test-run
+
+test:
+	$(CC) $(CFLAGS) \
+	./acadamy/cp/02_cll.c \
+	./test.c \
+	-o test
+
+test-run: test
+	./test
 clean:
 	rm -f test
