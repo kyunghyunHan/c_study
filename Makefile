@@ -92,7 +92,6 @@ sht-run: sht
 
 test:
 	$(CC) $(CFLAGS) \
-	./acadamy/cp/02_cll.c \
 	./test.c \
 	-o test
 
