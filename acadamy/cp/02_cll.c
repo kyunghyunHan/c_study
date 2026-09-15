@@ -72,3 +72,15 @@ void destroy_node(Node **head)
     free(*head);
     *head = NULL;
 }
+
+Node *get_node(Node *head, int index)
+{
+    Node *current = head;
+    while (index > 0)
+    {
+        current = current->next;
+        index--;
+    }
+    return current;
+}
+

@@ -346,7 +346,7 @@ void cdll_insert_new_head(Node **head, Node *new_head)
         // 기존 head의 이전 노드는 새 head
         (*head)->prev_node = new_head;
 
-        // head 포인터가 새 노드를 가리키도록 변경
+        // head 포인터가 새 노드를 가리a키도록 변경
         *head = new_head;
     }
 }
