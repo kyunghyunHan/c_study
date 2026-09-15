@@ -39,7 +39,7 @@ conq-run: conq
 
 prob:
 	$(CC) $(CFLAGS) \
-	./fundamentals/problem/a04.c \
+	./fundamentals/problem/a05.c \
 	-o test
 
 prob-run: prob

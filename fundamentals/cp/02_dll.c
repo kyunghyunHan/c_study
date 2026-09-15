@@ -201,5 +201,10 @@ void print_node(Node *head)
 }
 void destroy_dll(Node *head)
 {
-    free(head);
+    while (head != NULL)
+    {
+        Node *next = head->next_node;
+        free(head);
+        head = next;
+    }
 }
