@@ -199,12 +199,28 @@ void print_node(Node *head)
         current = current->next_node;
     }
 }
-void destroy_dll(Node *head)
+void destroy_dll(Node **head, Node **tail)
 {
-    while (head != NULL)
+    Node *current;
+
+    if (head == NULL)
     {
-        Node *next = head->next_node;
-        free(head);
-        head = next;
+        return;
+    }
+
+    current = *head;
+
+    while (current != NULL)
+    {
+        Node *next = current->next_node;
+        free(current);
+        current = next;
+    }
+
+    *head = NULL;
+
+    if (tail != NULL)
+    {
+        *tail = NULL;
     }
 }

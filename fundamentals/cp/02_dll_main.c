@@ -21,8 +21,9 @@ int main(void)
         new_node = create_node(&data);
         if (new_node == NULL)
         {
-            destroy_dll(head);
+            destroy_dll(&head);
             head = NULL;
+            tail = NULL;
             exit(0);
         }
         append_node(&head, new_node);
