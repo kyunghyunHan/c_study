@@ -199,3 +199,7 @@ void print_node(Node *head)
         current = current->next_node;
     }
 }
+void destroy_dll(Node *head)
+{
+    free(head);
+}

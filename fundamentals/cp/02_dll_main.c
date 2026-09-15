@@ -21,7 +21,7 @@ int main(void)
         new_node = create_node(&data);
         if (new_node == NULL)
         {
-            // Destroy_DLL(head);
+            destroy_dll(head);
             head = NULL;
             exit(0);
         }
