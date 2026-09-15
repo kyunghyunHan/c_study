@@ -24,13 +24,7 @@ int main(void)
             exit(0);
         }
     }
-    // // FILE *input = fopen("data.txt", "r");
-
-    // if (input == NULL)
-    // {
-    //     input = stdin;
-    // }
-
+    
     // while (fscanf(input, "%d %d", &data.id, &data.score) == 2)
     // {
     //     Node *new_node = NULL;
@@ -47,5 +41,7 @@ int main(void)
     // }
     // print_node(head);
 
+
+    
     return 0;
 }

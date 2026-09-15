@@ -1,4 +1,10 @@
 #include "02_cll.h"
+/*
+/*
+head는 처음에는 자기 자신을 가리킨다.
+head->next는 첫 번째 노드, head->prev는 마지막 노드를 가리킨다.
+append 시 마지막 노드와 head 사이에 새 노드를 연결한다.
+*/
 
 void init(Node **head)
 {
