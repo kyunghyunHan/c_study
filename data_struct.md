@@ -2,6 +2,7 @@
 
 ## (LinkedList)[]
 
-## (Stack)[]
+## [Stack](./algorithms/struct/list_stack.c)
+
 
 ## (Queue)[]
