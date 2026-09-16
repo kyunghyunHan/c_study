@@ -116,5 +116,13 @@ cq:
 
 cq-run: cq
 	./test
+
+hw:
+	$(CC) $(CFLAGS) \
+	./homework/hw2.c \
+	-o test
+
+hw-run: hw
+	./test
 clean:
 	rm -f test
