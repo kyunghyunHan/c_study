@@ -97,5 +97,15 @@ test:
 
 test-run: test
 	./test
+
+
+sq:
+	$(CC) $(CFLAGS) \
+	./acadamy/cp/03_queue_main.c \
+	./acadamy/cp/03_queue.c \
+	-o test
+
+sq-run: sq
+	./test
 clean:
 	rm -f test
