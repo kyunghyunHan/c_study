@@ -124,5 +124,13 @@ hw:
 
 hw-run: hw
 	./test
+
+tc:
+	$(CC) $(CFLAGS) \
+	./testcase/test02.c \
+	-o test
+
+tc-run: tc
+	./test
 clean:
 	rm -f test
