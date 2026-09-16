@@ -1,5 +1,5 @@
-#ifndef SQ_03_H
-#define SQ_03_H
+#ifndef CQ_03_H
+#define CQ_03_H
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>

@@ -107,5 +107,14 @@ sq:
 
 sq-run: sq
 	./test
+
+cq:
+	$(CC) $(CFLAGS) \
+	./acadamy/cp/03_cq_main.c \
+	./acadamy/cp/03_cq.c \
+	-o test
+
+cq-run: cq
+	./test
 clean:
 	rm -f test

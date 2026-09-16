@@ -15,21 +15,29 @@ Queue *init_queue(int s)
     return queue;
 }
 
-int enqueue(Queue *queue, int r, int c)
+int enqueue(Queue *queue, Node node)
 {
-    if (queue->rear >= queue->capacity)
+    if ((*queue).rear >= (*queue).capacity)
     {
         printf("OverFlow\n");
         return 0;
     }
 
-    (*queue).nodes[(*queue).rear].r = r;
-    (*queue).nodes[(*queue).rear].c = c;
-    (*queue).rear++;
+    (*queue).nodes[(*queue).rear++] = node;
 
     return 1;
 }
-
+Node *dequeue(Queue *queue)
+{
+    if ((*queue).front >= (*queue).rear)
+    {
+        printf("UnderFlow\n");
+        return 0;
+    }
+    (*queue).front++;
+    return 1;
+    return (*queue).nodes + (*queue).front++;
+}
 void print_q(const Queue *queue)
 {
     for (int i = (*queue).front; i < (*queue).rear; i++)
@@ -37,18 +45,6 @@ void print_q(const Queue *queue)
         printf("%d : %d %d\n", i - (*queue).front,
                (*queue).nodes[i].r, (*queue).nodes[i].c);
     }
-}
-
-int dequeue(Queue *queue)
-{
-    if ((*queue).front >= (*queue).rear)
-    {
-        printf("UnderFlow\n");
-        return 0;
-    }
-
-    (*queue).front++;
-    return 1;
 }
 
 void destroy_queue(Queue *queue)
