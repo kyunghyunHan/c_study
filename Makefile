@@ -127,7 +127,7 @@ hw-run: hw
 
 tc:
 	$(CC) $(CFLAGS) \
-	./testcase/test04.c \
+	./testcase/test05.c \
 	-o test
 
 tc-run: tc
