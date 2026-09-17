@@ -89,8 +89,8 @@ Node *dequeue(Queue *queue)
         (*queue).rear->next_node = (*queue).front;
 
         (*remove).next_node = NULL;
-        (*queue).count--;
     }
+    (*queue).count--;
     return remove;
 }
 void destroy_node(Node *node)
