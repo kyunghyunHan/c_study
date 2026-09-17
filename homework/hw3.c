@@ -16,42 +16,54 @@ typedef struct Queue
 {
     Node *front;
     Node *rear;
+    Node *nodes;
     int count;
     int size;
 
 } Queue;
 Queue *init(int s)
 {
-    Queue *queue = (Queue *)malloc(sizeof(Queue));
+    if (s <= 0)
+        return NULL;
+
+    Queue *queue = (Queue *)malloc(sizeof(Queue) + sizeof(Node) * (s + 1));
 
     if (queue == NULL)
     {
         return NULL;
     }
-    Node *dummy = malloc(sizeof(Node));
-    if (dummy == NULL)
+
+    Node *dummy = (Node *)(queue + 1);
+    Node *nodes = dummy + 1;
+
+    for (int i = 0; i < s - 1; i++)
     {
-        free(queue);
-        return NULL;
+        nodes[i].next_node = &nodes[i + 1];
     }
+    nodes[s - 1].next_node = NULL;
+
     // (*queue).front = NULL;
     // (*queue).rear = NULL;
     (*queue).front = dummy;
     (*queue).rear = dummy;
-    dummy->next_node = dummy; // 더미버전
+    (*queue).nodes = nodes;
+    (*dummy).next_node = dummy; // 더미버전
     (*queue).count = 0;
     (*queue).size = s;
     return queue;
 }
-Node *create_node(Data data)
+Node *create_node(Queue *queue, Data data)
 {
-    Node *new_node = (Node *)malloc(sizeof(Node));
-    if (new_node == NULL)
+    if (queue == NULL || (*queue).nodes == NULL)
     {
+        printf("OverFlow\n");
         return NULL;
     }
-    new_node->data = data;
-    new_node->next_node = NULL;
+
+    Node *new_node = (*queue).nodes;
+    (*queue).nodes = (*new_node).next_node;
+    (*new_node).data = data;
+    (*new_node).next_node = NULL;
     return new_node;
 }
 void enqueue(Queue *queue, Node *new_node)
@@ -76,21 +88,21 @@ void enqueue(Queue *queue, Node *new_node)
 }
 Node *dequeue(Queue *queue)
 {
-    if (queue == NULL || (*queue).front == NULL)
+    if (queue == NULL || (*queue).count == 0)
     {
         printf("UnderFlow\n");
         return NULL;
     }
 
     // Node *remove = (*queue).front;
-    Node *remove = queue->front->next_node;
+    Node *remove = (*(*queue).front).next_node;
     // 더미가 remove 다음 노드를 가리키게
-    queue->front->next_node = remove->next_node;
+    (*(*queue).front).next_node = (*remove).next_node;
 
     // 마지막 데이터 노드를 삭제했다면
-    if (queue->rear == remove)
+    if ((*queue).rear == remove)
     {
-        queue->rear = queue->front;
+        (*queue).rear = (*queue).front;
     }
     // if ((*queue).front == (*queue).rear)
     // {
@@ -101,19 +113,20 @@ Node *dequeue(Queue *queue)
     // {
     //     (*queue).front = (*(*queue).front).next_node;
 
-    //     (*queue).rear->next_node = (*queue).front;
+    //     (*(*queue).rear).next_node = (*queue).front;
 
     //     (*remove).next_node = NULL;
     // }
     (*queue).count--;
     return remove;
 }
-void destroy_node(Node *node)
+void destroy_node(Queue *queue, Node *node)
 {
-    if (node == NULL)
+    if (queue == NULL || node == NULL)
         return;
 
-    free(node);
+    (*node).next_node = (*queue).nodes;
+    (*queue).nodes = node;
 }
 void destroy_queue(Queue *queue)
 {
@@ -129,7 +142,7 @@ void printq(Queue *queue)
     {
         return;
     }
-    Node *target = queue->front->next_node;
+    Node *target = (*(*queue).front).next_node;
     // Node *target = (*queue).front;
     int i = 0;
     while (i < (*queue).count)
@@ -161,13 +174,14 @@ int main(void)
         {
             if (scanf("%d %d", &r, &c) != 2)
                 break;
-            Node *new_node = create_node((Data){r, c});
+            Node *new_node = create_node(queue, (Data){r, c});
             enqueue(queue, new_node);
+            count++;
         }
         else if (cmd == 'D')
         {
             Node *removed = dequeue(queue);
-            destroy_node(removed);
+            destroy_node(queue, removed);
         }
     }
     printq(queue);
