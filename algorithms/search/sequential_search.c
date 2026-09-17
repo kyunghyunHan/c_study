@@ -11,16 +11,21 @@ gcc -Wall -Wextra \
 Node *sll_sequential_search(Node *head, int target)
 {
     Node *current = head;
-
+    Node *match = NULL;
     while (current != NULL)
     {
         if (current->data == target)
-            return current;
-
-        current = current->next_node;
+        {
+            match = current;
+            break;
+        }
+        else
+        {
+            current = current->next_node;
+        }
     }
 
-    return NULL;
+    return match;
 }
 
 Node *sll_move_to_front(Node **head, int target)

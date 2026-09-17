@@ -119,7 +119,7 @@ cq-run: cq
 
 hw:
 	$(CC) $(CFLAGS) \
-	./homework/hw2.c \
+	./homework/hw4.c \
 	-o test
 
 hw-run: hw
@@ -131,6 +131,15 @@ tc:
 	-o test
 
 tc-run: tc
+	./test
+
+ssn:
+	$(CC) $(CFLAGS) \
+	./algorithms/search/sequential_search.c \
+	./algorithms/struct/linked_list.c \
+	-o test
+
+ssn-run: ssn
 	./test
 clean:
 	rm -f test
