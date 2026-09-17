@@ -119,7 +119,7 @@ cq-run: cq
 
 hw:
 	$(CC) $(CFLAGS) \
-	./homework/hw4.c \
+	./homework/hw5.c \
 	-o test
 
 hw-run: hw
