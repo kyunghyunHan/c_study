@@ -127,7 +127,7 @@ hw-run: hw
 
 tc:
 	$(CC) $(CFLAGS) \
-	./testcase/test02.c \
+	./testcase/test04.c \
 	-o test
 
 tc-run: tc
@@ -140,6 +140,15 @@ ssn:
 	-o test
 
 ssn-run: ssn
+	./test
+
+
+day:
+	$(CC) $(CFLAGS) \
+	./acadamy/cp/day18.c \
+	-o test
+
+day-run: day
 	./test
 clean:
 	rm -f test

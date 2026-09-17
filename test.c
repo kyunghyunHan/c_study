@@ -1,137 +1,78 @@
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <time.h>
+#include <stdio.h>
 
-typedef struct _node
-{
-    char val;
-    struct _node *next;
-    struct _node *prev;
-} node;
+#define MAX 101
 
-typedef enum COMMEND
+// 인접 리스트에 저장할 노드
+typedef struct Node
 {
-    L = 'L',
-    D = 'D',
-    B = 'B',
-    P = 'P'
-} COMMEND;
+    int vertex;        // 연결된 정점 번호
+    struct Node *next; // 다음 인접 정점
+} Node;
 
-/*
-init 더미생성
-append 값생성및 추가
-comment  커맨드받아서 연산
-destroy 메모리 해제
-print_str  프린트
-insert 추가
-*/
-void init_node(node **head)
-{
-    *head = (node *)calloc(1, sizeof(node));
-    if (*head == NULL)
-        exit(0);
-    (*head)->val = 0;
-    (*head)->next = *head;
-    (*head)->prev = *head;
-}
+// BFS에서 사용할 배열 기반 큐
+int queue[MAX];
+int front, rear; // 꺼낼 위치와 넣을 위치
 
-node *insert(node *pos, char ch)
-{
-    node *newnode = calloc(1, sizeof(node));
-    if (newnode == NULL)
-        exit(0);
+// 각 정점의 방문 여부를 저장하는 배열
+int used[MAX] = {0};
 
-    newnode->val = ch;
-    newnode->prev = pos;
-    newnode->next = pos->next;
-    pos->next->prev = newnode;
-    pos->next = newnode;
-
-    return newnode;
-}
-
-void append(node *head, const char *arr, int i)
-{
-    insert(head->prev, arr[i]);
-}
-node *commend(node *curr, node *head, char cmd)
-{
-    if (cmd == L)
-    {
-        if (curr != head)
-            curr = curr->prev;
-    }
-    else if (cmd == D)
-    {
-        if (curr->next != head)
-            curr = curr->next;
-    }
-    else if (cmd == B)
-    {
-        if (curr != head)
-        {
-            curr->prev->next = curr->next;
-            curr->next->prev = curr->prev;
-            node *tmp = curr;
-            curr = curr->prev;
-            free(tmp);
-        }
-    }
-    else if (cmd == P)
-    {
-        char ch;
-        (void)scanf(" %c", &ch);
-        curr = insert(curr, ch);
-    }
-    return curr;
-}
-void destroy(node *head)
-{
-    node *curr = head->next;
-
-    while (curr != head)
-    {
-        node *next = curr->next;
-        free(curr);
-        curr = next;
-    }
-}
-void print_str(node *head)
-{
-    node *curr = head->next;
-    while (curr != head)
-    {
-        printf("%c", curr->val);
-        curr = curr->next;
-    }
-    printf("\n");
-}
+// graph[i]는 i번 정점의 인접 리스트 시작 주소
+Node *graph[MAX] = {NULL};
 
 int main(void)
 {
-    char arr[100001] = {0};
-    (void)scanf("%s", arr);
-    int l = strlen(arr);
-    node *head = NULL;
-    init_node(&head);
-    for (int i = 0; i < l; i++)
+    // 큐를 빈 상태로 초기화
+    front = 0;
+    rear = 0;
+
+    int a, b;
+
+    // 간선 6개를 입력받아 인접 리스트 생성
+    for (int i = 0; i < 6; i++)
     {
-        append(head, arr, i);
+        scanf("%d %d", &a, &b);
+
+        // a에서 b로 연결되는 새 노드 생성
+        Node *new_node = malloc(sizeof(Node));
+
+        new_node->vertex = b;
+
+        // 새 노드를 a의 인접 리스트 맨 앞에 삽입
+        new_node->next = graph[a];
+        graph[a] = new_node;
     }
-    node *curr = head->prev;
-    char cmd;
-    int n;
-    (void)scanf("%d", &n);
-    for (int i = 0; i < n; i++)
+
+    // 1번에서 BFS 시작
+    used[1] = 1;       // 큐에 넣을 때 방문 처리
+    queue[rear++] = 1; // 시작 정점을 큐에 삽입
+
+    // 큐가 빌 때까지 반복
+    while (front != rear)
     {
-        (void)scanf(" %c", &cmd);
-        curr = commend(curr, head, cmd);
+        // 큐의 맨 앞 정점을 꺼냄
+        int current = queue[front++];
+
+        printf("%d 방문\n", current);
+
+        // 현재 정점과 연결된 정점들을 순회
+        Node *temp = graph[current];
+
+        while (temp != NULL)
+        {
+            int next = temp->vertex;
+
+            // 아직 방문하지 않은 정점만 큐에 삽입
+            if (used[next] == 0)
+            {
+                used[next] = 1;
+                queue[rear++] = next;
+            }
+
+            // 다음 인접 노드로 이동
+            temp = temp->next;
+        }
     }
-    print_str(head);
-    destroy(head);
-    free(head);
-    head = curr = NULL;
 
     return 0;
 }

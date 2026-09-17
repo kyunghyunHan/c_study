@@ -14,20 +14,20 @@ Node *sll_sequential_search(Node *head, int target)
     Node *match = NULL;
     while (current != NULL)
     {
-        if (current->data == target)
+        if (current->data == target) // 찾고자 하는 해당 값의 노드가 가지고 잇으면 노드의주소를 MAtch에저장
         {
             match = current;
             break;
         }
         else
         {
-            current = current->next_node;
+            current = current->next_node; // 현재 노등에 찾는 값이 없으면 다음 노드 조사
         }
     }
 
-    return match;
+    return match; // 찾고있는 값을 가진 노드의 주소반환
 }
-
+// 전진 이동법
 Node *sll_move_to_front(Node **head, int target)
 {
     Node *current = *head;
@@ -35,11 +35,13 @@ Node *sll_move_to_front(Node **head, int target)
 
     while (current != NULL)
     {
-        if (current->data == target)
+        if (current->data == target) // 순차탐색으토해 검색ㄹ
         {
             if (previous != NULL)
             {
+                // 자신의 이전 노드와 다음 노드를 연결
                 previous->next_node = current->next_node;
+                // 자신을 가장 앞으로 이동
                 current->next_node = *head;
                 *head = current;
             }
@@ -52,7 +54,7 @@ Node *sll_move_to_front(Node **head, int target)
 
     return NULL;
 }
-
+// 전위법 위치를 번경 : 자주탐색된 항목을 조금씩 앞으로 옮김
 Node *sll_transpose(Node **head, int target)
 {
     Node *current = *head;
@@ -83,7 +85,11 @@ Node *sll_transpose(Node **head, int target)
 
     return NULL;
 }
-
+/*계수법
+데이터가 각 요소가 탐색된 횟수를 별도의 공간에 저장
+탐색된 횟수가 높은 순으로 데이터를 재ㅜ구성
+SLL_FrequencyCount
+*/
 int main(void)
 {
     int i;
