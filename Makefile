@@ -119,7 +119,7 @@ cq-run: cq
 
 hw:
 	$(CC) $(CFLAGS) \
-	./homework/hw5.c \
+	./homework/hw8.c \
 	-o test
 
 hw-run: hw
@@ -149,6 +149,33 @@ day:
 	-o test
 
 day-run: day
+	./test
+
+jungol:
+	$(CC) $(CFLAGS) \
+	./acadamy/jungol/p1695.c \
+	-o test
+
+jungol-run: jungol
+	./test
+
+dfs:
+	$(CC) $(CFLAGS) \
+	./algorithms/dfs/exam01.c \
+	-o test
+
+dfs-run: dfs
+	./test
+
+
+
+graph:
+	$(CC) $(CFLAGS) \
+	./algorithms/Graph/test_graph.c \
+	./algorithms/Graph/graph.c \
+	-o test
+
+graph-run: graph
 	./test
 clean:
 	rm -f test
