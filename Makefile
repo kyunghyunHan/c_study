@@ -1,181 +1,83 @@
-CC = gcc
-CFLAGS = -Wall -Wextra
+CC := gcc
+CFLAGS := -std=c11 -Wall -Wextra -Wpedantic
+TARGET := test
 
-sll:
-	$(CC) $(CFLAGS) \
-	./fundamentals/cp/02_SLL_main.c \
-	./fundamentals/cp/02_SLL.c \
-	-o test
+.DEFAULT_GOAL := test
 
-sll-run: sll
-	./test
+BUILD_TARGETS := \
+	test \
+	sll dll cll \
+	sq cq \
+	heap rbt pq sht \
+	greed conq prob \
+	hw tc ssn day jungol dfs \
+	graph topolo mst dijkstra
 
-dll:
-	$(CC) $(CFLAGS) \
-	./fundamentals/cp/02_dll_main.c \
-	./fundamentals/cp/02_dll.c \
-	-o test
+RUN_TARGETS := $(addsuffix -run,$(BUILD_TARGETS))
 
-dll-run: dll
-	./test
-cll:
-	$(CC) $(CFLAGS) \
-	./fundamentals/cp/02_cll_main.c \
-	./fundamentals/cp/02_cll.c \
-	-o test
+.PHONY: $(BUILD_TARGETS) $(RUN_TARGETS) clean help
 
-cll-run: cll
-	./test
+# 기본 테스트
+test: SOURCES := test.c
 
-greed:
-	$(CC) $(CFLAGS) \
-	./algorithms/greed/exam01.c \
-	-o test
+# 연결 리스트
+sll: SOURCES := acadamy/cp/02_SLL_main.c acadamy/cp/02_SLL.c
+dll: SOURCES := acadamy/cp/02_dll_main.c acadamy/cp/02_dll.c
+cll: SOURCES := acadamy/cp/02_cll_main.c acadamy/cp/02_cll.c
 
-greed-run: greed
-	./test
+# 큐
+sq: SOURCES := acadamy/cp/03_queue_main.c acadamy/cp/03_queue.c
+cq: SOURCES := acadamy/cp/03_cq_main.c acadamy/cp/03_cq.c
 
+# 자료구조
+heap: SOURCES := algorithms/struct/heap.c algorithms/struct/test_heap.c
+rbt: SOURCES := algorithms/struct/rbt.c algorithms/struct/test_rbt.c
+pq: SOURCES := algorithms/struct/priority_queue.c algorithms/struct/test_priority_queue.c
+sht: SOURCES := algorithms/struct/simple_hash_table.c algorithms/struct/test_simple_hash_table.c
 
-conq:
-	$(CC) $(CFLAGS) \
-	./algorithms/Conquer/exam01.c \
-	-o test
+# 알고리즘 연습
+greed: SOURCES := algorithms/greed/exam01.c
+conq: SOURCES := algorithms/Conquer/exam01.c
+prob: SOURCES := acadamy/problem/a05.c
+ssn: SOURCES := algorithms/search/sequential_search.c algorithms/struct/linked_list.c
+dfs: SOURCES := algorithms/dfs/exam01.c
 
-conq-run: conq
-	./test
+# 과제 및 문제 풀이
+hw: SOURCES := homework/hw8.c
+tc: SOURCES := testcase/test05.c
+day: SOURCES := acadamy/cp/day18.c
+jungol: SOURCES := acadamy/jungol/p1695.c
 
-prob:
-	$(CC) $(CFLAGS) \
-	./fundamentals/problem/a05.c \
-	-o test
+# 그래프
+graph: SOURCES := algorithms/Graph/test_graph.c algorithms/Graph/graph.c
+topolo: SOURCES := \
+	algorithms/Graph/test_topological_sort.c \
+	algorithms/Graph/topological_sort.c \
+	algorithms/Graph/linked_list.c \
+	algorithms/Graph/graph.c
 
-prob-run: prob
-	./test
+mst: SOURCES := \
+	algorithms/Graph/minimum_spanning_tree/test_mst.c \
+	algorithms/Graph/minimum_spanning_tree/mst.c \
+	algorithms/Graph/graph.c
 
-heap:
-	$(CC) $(CFLAGS) \
-	./algorithms/struct/heap.c \
-	./algorithms/struct/test_heap.c \
-	-o test
+dijkstra: SOURCES := \
+	algorithms/Graph/shortest_path/test_dijkstra.c \
+	algorithms/Graph/shortest_path/dijkstra.c \
+	algorithms/Graph/graph.c
 
-heap-run: heap
-	./test
-	
-rbt:
-	$(CC) $(CFLAGS) \
-	./algorithms/struct/rbt.c \
-	./algorithms/struct/test_rbt.c \
-	-o test
+# 공통 빌드 및 실행 규칙
+$(BUILD_TARGETS):
+	$(CC) $(CFLAGS) $(SOURCES) -o $(TARGET)
 
-rbt-run: rbt
-	./test
+$(RUN_TARGETS): %-run: %
+	./$(TARGET)
 
-pq:
-	$(CC) $(CFLAGS) \
-	./algorithms/struct/priority_queue.c \
-	./algorithms/struct/test_priority_queue.c \
-	-o test
-
-pq-run: rbt
-	./test
-
-sht:
-	$(CC) $(CFLAGS) \
-	./algorithms/struct/simple_hash_table.c \
-	./algorithms/struct/test_simple_hash_table.c \
-	-o test
-
-sht-run: sht
-	./test
-
-.PHONY: test test-run
-
-test:
-	$(CC) $(CFLAGS) \
-	./test.c \
-	-o test
-
-test-run: test
-	./test
-
-
-sq:
-	$(CC) $(CFLAGS) \
-	./acadamy/cp/03_queue_main.c \
-	./acadamy/cp/03_queue.c \
-	-o test
-
-sq-run: sq
-	./test
-
-cq:
-	$(CC) $(CFLAGS) \
-	./acadamy/cp/03_cq_main.c \
-	./acadamy/cp/03_cq.c \
-	-o test
-
-cq-run: cq
-	./test
-
-hw:
-	$(CC) $(CFLAGS) \
-	./homework/hw8.c \
-	-o test
-
-hw-run: hw
-	./test
-
-tc:
-	$(CC) $(CFLAGS) \
-	./testcase/test05.c \
-	-o test
-
-tc-run: tc
-	./test
-
-ssn:
-	$(CC) $(CFLAGS) \
-	./algorithms/search/sequential_search.c \
-	./algorithms/struct/linked_list.c \
-	-o test
-
-ssn-run: ssn
-	./test
-
-
-day:
-	$(CC) $(CFLAGS) \
-	./acadamy/cp/day18.c \
-	-o test
-
-day-run: day
-	./test
-
-jungol:
-	$(CC) $(CFLAGS) \
-	./acadamy/jungol/p1695.c \
-	-o test
-
-jungol-run: jungol
-	./test
-
-dfs:
-	$(CC) $(CFLAGS) \
-	./algorithms/dfs/exam01.c \
-	-o test
-
-dfs-run: dfs
-	./test
-
-
-
-graph:
-	$(CC) $(CFLAGS) \
-	./algorithms/Graph/test_graph.c \
-	./algorithms/Graph/graph.c \
-	-o test
-
-graph-run: graph
-	./test
 clean:
-	rm -f test
+	rm -f $(TARGET)
+
+help:
+	@echo "빌드: make <이름>"
+	@echo "실행: make <이름>-run"
+	@echo "이름: $(BUILD_TARGETS)"
+	@echo "정리: make clean"
