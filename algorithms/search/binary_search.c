@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "point.h"
 /*
+//정렬대어있다 하에
 데이터의 중앙에 있는 요소 고름
 중앙 요소값과 찾고자 하는 목표값을 비교
 목표값이 중앙 요소값보다 작다면 중앙을 기준으로 데이터 왼편에 대해
@@ -15,14 +16,17 @@ Point *BinarySearch(Point PointList[], int Size, double Target)
 
     Left = 0;
     Right = Size - 1;
-
+    // 순서 -> min = left+ right/2
+    // left가 right보다 커지면
     while (Left <= Right) // 탐색 범위의 크기가 0이 될떄까지 while문 반복
     {
         Mid = (Left + Right) / 2; // 중앙의 요소 위치를 계산
-
+        // 타겟이 mid 값하고 같다면 반환
         if (Target == PointList[Mid].point)
             return &(PointList[Mid]);
+        // 타겟이 미드값보다 크면 오른쪽에 타겟이 있으니
         else if (Target > PointList[Mid].point)
+            // left값을 증가
             Left = Mid + 1; // 오른쪽에 타겟이 있으니 left계산
         else
             Right = Mid - 1; // 왼쪽에 값이 있으니 right을 계산
