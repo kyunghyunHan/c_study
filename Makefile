@@ -46,7 +46,7 @@ dfs: SOURCES := algorithms/dfs/exam01.c
 hw: SOURCES := homework/hw8.c
 tc: SOURCES := testcase/test05.c
 day: SOURCES := acadamy/cp/04_stack_main.c
-jungol: SOURCES := acadamy/jungol/p1912.c
+jungol: SOURCES := acadamy/jungol/p1662.c
 
 # 그래프
 graph: SOURCES := algorithms/Graph/test_graph.c algorithms/Graph/graph.c
