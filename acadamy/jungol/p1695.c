@@ -24,6 +24,12 @@ int n;
 int rear;
 int front;
 int count = 0;
+
+// int danji_bfs(int sr, int sc, int vno)
+// {
+
+//     Node *stack[MAX * MAX] = {0};
+// }
 void input_data(void)
 {
     char temp[MAX] = {0};
@@ -76,7 +82,7 @@ void dfs(int y, int x, int n)
             // queue[rear].r = nr;
             // queue[rear].c = nc;
             // rear++;
-                }
+        }
     }
     // }
 }

@@ -37,12 +37,12 @@ int push(Stack *stack, int data)
 
 int pop(Stack *stack)
 {
-    if (stack->top == 0)
+    if (stack->top <= 0)
     {
         printf("Underflow\n");
         return -1;
     }
-    int data = stack->data[--stack->top];
+    int data = stack->data[--(*stack).top];
     printf("Pop: %d\n", data);
     return data;
 }
@@ -79,10 +79,16 @@ int main(void)
     }
 
     printf("Stack:");
-    for (size_t i = 0; i < stack->top; ++i)
+    int stack_size = (*stack).size;
+
+    while (size)
     {
-        printf(" %d", stack->data[i]);
+        printf("%d\n", (*stack).data[--size]);
     }
+    // for (size_t i = 0; i < stack->top; ++i)
+    // {
+    //     printf(" %d", stack->data[i]);
+    // }
     printf("\n");
 
     free(stack);
