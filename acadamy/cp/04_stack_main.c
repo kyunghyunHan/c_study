@@ -2,38 +2,63 @@
 #include <stdlib.h>
 #include <string.h>
 #if 01
-int *stack = 0;
-int top = 0;
 
-void push(int *stack, int data, int size)
+typedef struct Stack
 {
-    if (top == size)
+    int *data;
+    size_t size;
+    size_t top;
+} Stack;
+
+// 메모리 할당및 해지 한번
+Stack *init_stack(size_t size)
+{
+    Stack *stack = calloc(1, sizeof(*stack) + size * sizeof(*stack->data));
+    if (stack != NULL)
     {
-        printf("Overflow\n");
-        return;
+        stack->data = (int *)(stack + 1);
+        stack->size = size;
     }
-    stack[top++] = data;
-    printf("Push: %d\n", data);
+
+    return stack;
 }
 
-int pop(void)
+int push(Stack *stack, int data)
 {
-    if (top == 0)
+    if (stack->top >= stack->size)
+    {
+        printf("Overflow\n");
+        return -1;
+    }
+    stack->data[stack->top++] = data;
+    printf("Push: %d\n", data);
+    return 0;
+}
+
+int pop(Stack *stack)
+{
+    if (stack->top == 0)
     {
         printf("Underflow\n");
         return -1;
     }
-    int data = stack[--top];
+    int data = stack->data[--stack->top];
     printf("Pop: %d\n", data);
     return data;
 }
+
 int main(void)
 {
+    Stack *stack = NULL;
     int size, cmd_cnt, data;
     char cmd[5] = {0};
     (void)freopen("sdata.txt", "r", stdin);
-    (void)scanf("%d %d", &size, &cmd_cnt);
-    stack = (int *)malloc(sizeof(int) * size);
+    if (scanf("%d %d", &size, &cmd_cnt) != 2 || size <= 0 || cmd_cnt < 0)
+    {
+        return 1;
+    }
+
+    stack = init_stack((size_t)size);
     if (stack == NULL)
     {
         return 1;
@@ -41,22 +66,22 @@ int main(void)
 
     for (int i = 0; i < cmd_cnt; ++i)
     {
-        (void)scanf("%s", cmd);
+        (void)scanf("%4s", cmd);
         if (!strcmp(cmd, "push"))
         {
             (void)scanf("%d", &data);
-            push(stack, data, size);
+            push(stack, data);
         }
         else
         {
-            pop();
+            pop(stack);
         }
     }
 
     printf("Stack:");
-    for (int i = 0; i < top; ++i)
+    for (size_t i = 0; i < stack->top; ++i)
     {
-        printf(" %d", stack[i]);
+        printf(" %d", stack->data[i]);
     }
     printf("\n");
 
