@@ -24,8 +24,9 @@ void sht_destroy_hash_table(HashTable *ht)
     free((*ht).table);
     free(ht);
 }
-// 주소 = =입력값 % 테이블 크기
 int sht_hash(KeyType key, int table_size)
 {
     return key % table_size;
 }
+
+

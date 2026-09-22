@@ -1,9 +1,9 @@
 #ifndef SIMPLE_HASHTABLE_H
+
 #define SIMPLE_HASHTABLE_H
 
 #include <stdio.h>
 #include <stdlib.h>
-
 typedef int KeyType;
 typedef int ValueType;
 
@@ -17,12 +17,13 @@ typedef struct HashTable
 {
     int table_size;
     Node *table;
+
 } HashTable;
 
 HashTable *sht_create_hash_table(int table_size);
-void sht_set(HashTable *ht, KeyType key, ValueType value);
-ValueType sht_get(HashTable *ht, KeyType key);
-void sht_destroy_hash_table(HashTable *ht);
-int sht_hash(KeyType key, int table_size);
+void *sht_set(HashTable *ht, KeyType key, ValueType value);
+ValueType *sht_get(HashTable *ht, KeyType key);
+void *sht_destroy_hsah_table(HashTable *ht);
+int *sht_hash(KeyType key, int table_size);
 
 #endif
