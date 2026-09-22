@@ -32,7 +32,7 @@ void bfs(int start_r, int start_c)
     {
 
         Point current = quent[front++];
-        if (current.x ==k && current.y == s)
+        if (current.x == k && current.y == s)
         {
             break;
         }
@@ -50,6 +50,7 @@ void bfs(int start_r, int start_c)
             if (arr[next_y][next_x] == 0)
             {
                 arr[next_y][next_x] = arr[current.y][current.x] + 1;
+                quent[rear++] = (Point){next_x, next_y};
             }
         }
     }
@@ -62,7 +63,7 @@ int main(void)
 
     scanf("%d %d %d %d", &r, &c, &s, &k);
 
-    bfs(r,c);
+    bfs(r, c);
 
     for (int i = 1; i <= n; i++)
     {
