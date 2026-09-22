@@ -1,54 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
-#define MAX (500000)
-
-int binary_search(int arr[], int size, int target)
-{
-    int mid;
-    int right = size - 1;
-    int left = 0;
-    while (left <= right)
-    {
-        mid = (left + right) / 2;
-        if (target == arr[mid])
-        {
-            return mid;
-        }
-        else if (target > arr[mid])
-        {
-            left = mid + 1;
-        }
-        else
-        {
-            right = mid - 1;
-        }
-    }
+#include<stdio.h>
+void test(int i){
+  if (i==10){
+    return;
+  }
+  printf("홍길동\n");
+  test(i+1);
 }
-int main(void)
-{
-    int n;
-    int arr[MAX];
-    int q;
-    int brr[MAX];
-
-    freopen("jungol.txt", "r", stdin);
-    scanf("%d", &n);
-
-    for (int i = 0; i < n; i++)
-    {
-        scanf("%d", &arr[i]);
-    }
-    scanf("%d", &q);
-
-    for (int i = 0; i < q; i++)
-    {
-        scanf("%d", &brr[i]);
-    }
-
-    for (int i = 0; i < q; i++)
-    {
-
-        printf("%d ", binary_search(arr, q, brr[i]));
-    }
+int main(void){
+    test(0);
     return 0;
 }

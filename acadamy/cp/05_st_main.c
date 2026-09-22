@@ -12,7 +12,7 @@ void preorder(const Node *node)
     preorder(node->left);
     preorder(node->right);
 }
-
+//출력이 반복대면 출력바로 ㄴ
 void inorder(const Node *node)
 {
     if (node == NULL)

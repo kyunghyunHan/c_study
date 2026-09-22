@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #define MAX (1000000)
 int dp[MAX];
+
 int main(void)
 {
     int n;

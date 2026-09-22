@@ -39,6 +39,7 @@ void dfs(int row)
     for (int i = 0; i < n; i++)
     {
 
+//0 - 1  -1+
         if (drr1[row - i + n] == 1)
         {
             continue;

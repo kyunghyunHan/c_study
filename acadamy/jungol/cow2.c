@@ -12,6 +12,7 @@ int com(const void *a, const void *b)
  int binary_search_max(int *arr , int s , int e ,int max){
  int m  = -1;
  int res =-1;
+ while 
 }
 
 */
