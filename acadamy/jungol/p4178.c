@@ -4,6 +4,7 @@ int n, m;
 int top;
 int stack[7];
 int used[7];
+//l 이 사실상 top
 void dfs(int l)
 {
     // M개를 다 골랐다.
@@ -18,16 +19,20 @@ void dfs(int l)
     }
     // 현재 L번쨰 에 1~ n중 하나 선택
     //  현재 l번째 칸에 1~N 중 하나 선택
+    // 원리만 알면댐
     for (int i = 1; i <= n; i++)
     {
+        // 1 이 사용햇어 used
         if (used[i] == 1)
             continue;
-
+        // 아니면 하고
         used[i] = 1; // i 선택
-
+                     // 스택에 넣어
         stack[l] = i;
-        dfs(l + 1);
+        // 다음꺼
 
+        dfs(l + 1);
+        // 돌아왓으니까 선택취소
         used[i] = 0; // ★ 돌아왔으니까 선택 취소
     }
 }
