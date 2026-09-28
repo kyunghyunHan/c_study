@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+/*
+BFS = 다음 좌표를 큐에 예약한다.
+DFS = 다음 좌표로 바로 들어간다.
+*/
 int com(const void *a, const void *b)
 {
     int ia = *(int *)a;

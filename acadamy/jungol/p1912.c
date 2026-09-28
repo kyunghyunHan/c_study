@@ -10,7 +10,7 @@ void dfs(int i)
 {
     visited[i] = 1;
     printf("%d ", i);
-
+    
     int *current = graph[i];
     int index = 1;
 

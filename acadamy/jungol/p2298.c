@@ -1,6 +1,10 @@
 /*
 
 BFS는 넓이
+dfs는 깊이
+
+
+
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +23,31 @@ typedef struct Point
     int y;
 } Point;
 Point queue[MAX * MAX];
+void dfs(int start_x, int start_y, int h)
+{
+    used[start_y][start_x] = 1;
+    for (int i = 0; i < 4; i++)
+    {
+        int next_x = start_x + dx[i];
+        int next_y = start_y + dy[i];
+        if (next_x < 1 || next_x > n || next_y < 1 || next_y > n)
+        {
+            continue;
+        }
 
+        if (used[next_y][next_x] == 1)
+        {
+            continue;
+        }
+        if (map[next_y][next_x] <= h)
+        {
+            continue;
+        }
+        // 다음꺼를 재귀한다
+        dfs(next_x, next_y, h);
+    }
+}
+//모든 그순근의 경우의숫
 void bfs(int start_x, int start_y, int h)
 {
     front = rear = 0;
@@ -30,7 +58,7 @@ void bfs(int start_x, int start_y, int h)
     {
 
         Point currnet = queue[front++];
-
+        // 상하좌우 확인해서
         for (int i = 0; i < 4; i++)
         {
             int next_x = currnet.x + dx[i];
@@ -75,7 +103,7 @@ int main(void)
         memset(used, 0, sizeof(used));
         int cnt = 0;
         // 카운터  처음부터검산
-        //카운터는 몇번 bfs햇나
+        // 카운터는 몇번 bfs햇나
         for (int y = 1; y <= n; y++)
         {
             for (int x = 1; x <= n; x++)
@@ -84,9 +112,9 @@ int main(void)
                 if (map[y][x] > h &&
                     used[y][x] == 0)
                 {
-                    //카운터 증가
+                    // 카운터 증가
                     cnt++;
-                    bfs(x, y, h);
+                    dfs(x, y, h);
                 }
             }
         }
