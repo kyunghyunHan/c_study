@@ -27,15 +27,15 @@ void bfs(int start)
     rear = 0;
     front = 0;
     used[start] = 1;
-    queue[rear++] = 5;
-    int cnt = 0;
+    queue[rear++] = start;
+    int cnt = 1;
     while (front < rear)
     {
         int current = queue[front++];
 
         if (current == k)
         {
-            answer = cnt;
+            answer = arr[current];
             return;
         }
         for (int i = 0; i < 3; i++)
@@ -53,22 +53,23 @@ void bfs(int start)
             {
                 next = 2 * current;
             }
-            if (next < 1 || next > n)
+            if (next < 0 || next >= MAX)
             {
                 continue;
             }
-            if (used[next] == 0)
+            if (used[next] == 1)
             {
                 continue;
             }
             used[next] = 1;
             queue[rear++] = next;
-            cnt++;
+            arr[next] = arr[current] + 1;
         }
     }
 }
 int main(void)
 {
+    answer = 0;
     freopen("data.txt", "r", stdin);
     scanf("%d %d", &n, &k);
     bfs(n);
