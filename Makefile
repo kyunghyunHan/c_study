@@ -38,7 +38,7 @@ sht: SOURCES := algorithms/struct/simple_hash_table.c algorithms/struct/test_sim
 # 알고리즘 연습
 greed: SOURCES := algorithms/greed/exam01.c
 conq: SOURCES := algorithms/Conquer/exam01.c
-prob: SOURCES := acadamy/problem/a05.c
+prob: SOURCES := acadamy/problem/a06.c
 ssn: SOURCES := algorithms/search/sequential_search.c algorithms/struct/linked_list.c
 dfs: SOURCES := algorithms/dfs/exam01.c
 
@@ -46,7 +46,7 @@ dfs: SOURCES := algorithms/dfs/exam01.c
 hw: SOURCES := homework/hw8.c
 tc: SOURCES := testcase/test05.c
 day: SOURCES := acadamy/cp/05_st_main.c
-jungol: SOURCES := acadamy/jungol/p6188.c
+jungol: SOURCES := acadamy/jungol/p12047.c
 
 # 그래프
 graph: SOURCES := algorithms/Graph/test_graph.c algorithms/Graph/graph.c
