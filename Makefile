@@ -38,7 +38,7 @@ sht: SOURCES := algorithms/struct/simple_hash_table.c algorithms/struct/test_sim
 # 알고리즘 연습
 greed: SOURCES := algorithms/greed/exam01.c
 conq: SOURCES := algorithms/Conquer/exam01.c
-prob: SOURCES := acadamy/problem/a11.c
+prob: SOURCES := acadamy/problem/a16.c
 ssn: SOURCES := algorithms/search/sequential_search.c algorithms/struct/linked_list.c
 dfs: SOURCES := algorithms/dfs/exam01.c
 
