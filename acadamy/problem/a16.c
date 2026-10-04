@@ -10,9 +10,9 @@ dungeon 1
 
 */
 #include "problem.h"
-int a[100];
-int b[100];
-int dp[100000];
+int a[100009];
+int b[100009];
+int dp[100009];
 #define min(x, y) ((x) < (y) ? (x) : (y))
 
 int main(void)
@@ -20,20 +20,21 @@ int main(void)
     freopen("data.txt", "r", stdin);
     int n;
     scanf("%d", &n);
-    dp[1] = 0;
-    dp[2] = a[1];
-    for (int i = 1; i <= n - 1; i++)
+
+    for (int i = 2; i <= n; i++)
     {
         scanf("%d", &a[i]);
     }
-    for (int i = 1; i <= n - 2; i++)
+    for (int i = 3; i <= n; i++)
     {
         scanf("%d", &b[i]);
     }
+    dp[1] = 0;
+    dp[2] = a[2];
     for (int i = 3; i <= n; i++)
     {
         dp[i] = (int)min(
-            dp[i - 1] + a[i - 1], dp[i - 2] + b[i - 2]);
+            dp[i - 1] + a[i], dp[i - 2] + b[i]);
     }
     printf("%d", dp[n]);
     return 0;
