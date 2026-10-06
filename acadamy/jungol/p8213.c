@@ -39,7 +39,7 @@ int main(void)
 {
     answer = 0;
     cnt = 0;
-    freopen("data.txt", "r", stdin);
+    // freopen("data.txt", "r", stdin);
     int p;
     scanf("%d", &p);
     for (int i = 0; i < p; i++)
