@@ -1,38 +1,30 @@
 /*
-큐브돌리기
 
 */
+int com(const void *a, const void *b)
+{
+  int ia = *(const int *)a;
+  int ib = *(const int *)b;
+
+  return (ia > ib) - (ia < ib);
+}
+
 #include <stdio.h>
 #include <stdlib.h>
-int arr[5];
+#include <string.h>
+#include <math.h>
+
 int main(void)
 {
-  int cnt = 1;
-  int index = 4;
-  int n;
-  int q = 16;
-  freopen("data.txt", "r", stdin);
-  scanf("%d %d %d %d %d %d", &arr[0], &arr[1], &arr[2], &arr[3], &arr[4], &n);
-
-  while (1)
+  for (int i = 0; i < 3; i++)
   {
-    if (n <= 0)
+    for (int j = 0; j < 5; j++)
     {
-      printf("%d", cnt);
-      return 0;
+      char c;
+      scanf(" %c", &c);
+      printf("%c ", (char)c + 32);
     }
-    if (n >= q && arr[index] > 0)
-    {
-      arr[index]--;
-      n %= q;
-      cnt += n/q;
-    }
-    else
-    {
-      q >>= 1;
-      index--;
-    }
+    printf("\n");
   }
-  printf("%d", cnt);
   return 0;
 }
