@@ -8,13 +8,19 @@ int used[MAX][MAX];
 int dr[4] = {-1, 1, 0, 0};
 int dc[4] = {0, 0, -1, 1};
 int m, n, k;
-int *answer;
+int answer[MAX * MAX];
 int index;
 int count;
-void dfs(int x, int y)
+int com(const void *a, const void *b)
+{
+    int ia = *(const int *)a;
+    int ib = *(const int *)b;
+    return (ia > ib) - (ia < ib);
+}
+void dfs(int y, int x)
 {
 
-    used[x][y] = 1;
+    used[y][x] = 1;
     count++;
 
     for (int i = 0; i < 4; i++)
@@ -22,25 +28,25 @@ void dfs(int x, int y)
         int next_x = x + dc[i];
         int next_y = y + dr[i];
 
-        if (next_x < 0 || next_x > m || next_y < 0 || next_y > n)
+        if (next_x < 0 || next_x >= n || next_y < 0 || next_y >= m)
         {
             continue;
         }
-        if (arr[next_x][next_y] == 1)
+        if (arr[next_y][next_x] == 1)
         {
             continue;
         }
-        if (used[next_x][next_y] == 1)
+        if (used[next_y][next_x] == 1)
         {
             continue;
         }
-        dfs(next_x, next_y);
+
+        dfs(next_y, next_x);
     }
 }
 int main(void)
 {
-
-    freopen("jdata.txt", "r", stdin);
+    freopen("data.txt", "r", stdin);
     scanf("%d %d %d", &m, &n, &k);
 
     for (int a = 0; a < k; a++)
@@ -48,29 +54,39 @@ int main(void)
         int fc, fr, sc, sr;
         scanf("%d %d %d %d", &fc, &fr, &sc, &sr);
 
-        for (int i = fr; i < sr; i++)
+        for (int row = fr; row < sr; row++)
         {
-            for (int j = fc; j < sc; j++)
+            for (int col = fc; col < sc; col++)
             {
-                arr[i][j] = 1;
+                arr[row][col] = 1;
             }
         }
     }
-
-    for (int row = 1; row <= m; row++)
+    for (int row = m - 1; row >= 0; row--)
     {
-        for (int col = 1; col <= n; col++)
+        for (int col = 0; col < n; col++)
         {
-            // 직사각형이 아니고 + 아직 방문 안 했으면
-            if (arr[row][col] == 0 &&
-                used[row][col] == 0)
+            if (used[row][col] == 0 && arr[row][col] == 0)
             {
                 count = 0;
                 dfs(row, col);
-                printf("%d\n", count);
+                answer[index++] = count;
             }
         }
     }
-
+    printf("%d\n", index);
+    qsort(answer, index, sizeof(int), com);
+    for (int i = 0; i < index; i++)
+    {
+        printf("%d ", answer[i]);
+    }
+    // for (int row = m - 1; row >= 0; row--)
+    // {
+    //     for (int col = 0; col < n; col++)
+    //     {
+    //         printf("%d ", arr[row][col]);
+    //     }
+    //     printf("\n");
+    // }
     return 0;
 }

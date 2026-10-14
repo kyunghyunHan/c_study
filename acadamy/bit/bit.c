@@ -2,6 +2,12 @@
 
 int main(void)
 {
+
+    return 0;
+}
+
+void test01(void)
+{
     int a = 0x33CC33CC;
 
     printf("%X\n", (1 << 0) | a);
@@ -18,5 +24,5 @@ int main(void)
     printf("%X\n", a ^ (1 << 5));
     printf("%X\n", a ^ (1 << 21));
     printf("%X\n", a ^ (1 << 22));
-    return 0;
+    return;
 }
