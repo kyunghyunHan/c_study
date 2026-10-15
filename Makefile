@@ -11,7 +11,7 @@ BUILD_TARGETS := \
 	heap rbt pq sht \
 	greed conq prob \
 	hw tc ssn day jungol dfs \
-	graph topolo mst dijkstra
+	graph topolo mst dijkstra bit
 
 RUN_TARGETS := $(addsuffix -run,$(BUILD_TARGETS))
 
@@ -46,7 +46,7 @@ dfs: SOURCES := algorithms/dfs/exam01.c
 hw: SOURCES := homework/hw8.c
 tc: SOURCES := testcase/test05.c
 day: SOURCES := acadamy/cp/05_st_main.c
-jungol: SOURCES := acadamy/jungol/p1457.c
+jungol: SOURCES := acadamy/jungol/p3960.c
 
 # 그래프
 graph: SOURCES := algorithms/Graph/test_graph.c algorithms/Graph/graph.c
@@ -66,6 +66,9 @@ dijkstra: SOURCES := \
 	algorithms/Graph/shortest_path/dijkstra.c \
 	algorithms/Graph/graph.c
 
+#embedded
+
+bit: SOURCES := bit/exam01.c
 # 공통 빌드 및 실행 규칙
 $(BUILD_TARGETS):
 	$(CC) $(CFLAGS) $(SOURCES) -o $(TARGET)
