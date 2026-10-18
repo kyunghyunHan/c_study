@@ -31,3 +31,15 @@ typedef struct
     DevHandler handler;
 
 } Command;
+
+int cmd_on(Device *dev);
+int cmd_off(Device *dev);
+int cmd_toggle(Device *dev);
+int cmd_status(Device *dev);
+
+Command command_table[4] = {
+    {"on", cmd_on},
+    {"off", cmd_off},
+    {"toggle", cmd_toggle},
+    {"status", cmd_status},
+};
