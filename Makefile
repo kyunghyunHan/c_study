@@ -43,7 +43,7 @@ ssn: SOURCES := algorithms/search/sequential_search.c algorithms/struct/linked_l
 dfs: SOURCES := algorithms/dfs/exam01.c
 
 # 과제 및 문제 풀이
-hw: SOURCES := homework/hw8.c
+hw: SOURCES := homework/hw10.c
 tc: SOURCES := testcase/test05.c
 day: SOURCES := acadamy/cp/05_st_main.c
 jungol: SOURCES := acadamy/jungol/p8506.c
