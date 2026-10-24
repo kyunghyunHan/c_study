@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
-typedef struct {
+typedef struct
+{
     uint8_t (*fan_power)(float temperature);
 } CoolingStrategy;
 
@@ -14,11 +15,13 @@ uint8_t proportional_power(float temperature)
 {
     float power = (temperature - 40.0f) * 10.0f;
 
-    if (!(power > 0.0f)) {
+    if (!(power > 0.0f))
+    {
         return 0;
     }
 
-    if (power >= 100.0f) {
+    if (power >= 100.0f)
+    {
         return 100;
     }
 
@@ -35,15 +38,19 @@ void run(const CoolingStrategy *strategy, float temperature)
 int main(void)
 {
     const CoolingStrategy on_off = {
-        .fan_power = on_off_power
-    };
+        .fan_power = on_off_power};
 
     const CoolingStrategy proportional = {
-        .fan_power = proportional_power
-    };
+        .fan_power = proportional_power};
 
     run(&on_off, 43.0f);       // 팬 출력: 100%
     run(&proportional, 43.0f); // 팬 출력: 30%
 
     return 0;
 }
+
+typedef struct Sort
+{
+    int *(*sort)(int *arr);
+
+} Sort;
