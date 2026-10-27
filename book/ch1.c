@@ -13,10 +13,17 @@ int main(void)
     const char *ccp는 주소 변경은 가능
     */
     *cp = c;/*세그멘테이션 볼트발생 */
+
+    char ** cpp;
+    char *  const *cpcp;
+    cpcp = cpp;
     return 0;
+
+
 }
 
 /*왼쪽 피연산자는 const로 한정된 char에 대한 포인터
 오른쪽 피연산자는 한정되지 않은 char에 대한 포인터
 */
 
+/*정수 승격 */
