@@ -1,428 +1,102 @@
 # c_study
 
-C 언어 문법부터 자료구조, 알고리즘, 시스템 프로그래밍까지 주제별로 정리한 학습 저장소입니다.
+C/C++ 문법, 자료구조, 알고리즘, 디자인 패턴, 시스템 프로그래밍을 주제별로 정리한 학습 저장소입니다.
 
 ## 폴더 안내
 
 ```text
 c_study/
-├── fundamentals/       # C 기초 및 단계별 연습
-│   ├── c100/            # 기초 문제 풀이
-│   ├── cp/              # 일차별 C/포인터 학습
-│   ├── bit/             # 비트 연산
-│   ├── deep/            # 메모리 심화
-│   └── malloc/          # 동적 메모리 학습
-├── algorithms/         # 알고리즘과 자료구조
-│   ├── search/          # 탐색
-│   ├── sort/            # 정렬
-│   └── struct/          # 자료구조 구현
-├── projects/           # 콘솔 프로그램과 미니 프로젝트
-├── systems/            # 커널 및 네트워크 실습
-│   ├── kernel/
-│   ├── kernel201/
-│   └── network/
-├── multimedia/         # FFmpeg 실습 및 미디어 자료
-├── web/                # 학습용 HTML 페이지
-└── sandbox/            # 임시 실험 코드와 입력 자료
+├── fundamentals/                 # C 기초 학습과 문서
+│   ├── c_language.md             # 문법·포인터·메모리 핵심 정리
+│   ├── c100/                     # C 기초 문제
+│   ├── cp/                       # 일차별 수업과 포인터 학습 문서
+│   ├── bit/                      # 비트 연산과 레지스터 연습
+│   ├── deep/                     # 메모리 심화
+│   └── malloc/                   # 동적 메모리
+├── algorithms/                   # 주제별 알고리즘과 자료구조
+│   ├── data_structures/          # 리스트·스택·큐·트리·힙
+│   ├── hash_table/               # 해시 테이블 별도 연습
+│   ├── search/                   # 순차·이진 탐색
+│   ├── sort/                     # 버블·삽입·퀵 정렬
+│   ├── graphs/                   # 그래프·위상 정렬·MST·최단 경로
+│   ├── bfs/                      # 너비 우선 탐색
+│   ├── dfs/                      # 깊이 우선 탐색
+│   ├── backtracking/             # 백트래킹
+│   ├── brute_force/              # 완전 탐색
+│   ├── divide_and_conquer/       # 분할 정복
+│   ├── dynamic/                  # 동적 계획법
+│   └── greedy/                   # 탐욕 알고리즘
+├── exercises/                    # 출처별 문제 풀이와 과제
+│   ├── book/                     # 교재 연습
+│   ├── homework/                 # 과제와 과제 안내
+│   ├── jungol/                   # 정올 문제
+│   ├── problem/                  # 수업 문제
+│   └── testcase/                 # 개별 연습 문제
+├── design_patterns/              # 디자인 원칙과 패턴
+│   └── sort_strategy/            # 정렬 정책과 팩토리
+│       ├── c/                    # C의 함수 포인터 구현
+│       ├── cpp/                  # std::list 기반 C++ 구현
+│       └── cpp_owned/            # 스마트 포인터로 정책을 소유하는 구현
+├── projects/                     # 연락처·정렬·게임 등 미니 프로젝트
+├── systems/                      # 시스템 프로그래밍
+│   ├── device_driver/            # 가상 장치 드라이버
+│   ├── kernel/                   # 커널 실습
+│   ├── kernel201/                # 키보드 입력을 포함한 커널 실습
+│   └── network/                  # TCP 네트워크 실습
+├── multimedia/ffmpeg/            # FFmpeg 실습
+├── sandbox/                      # 임시 실험과 로컬 입력 데이터
+└── build/                        # 실행 파일과 디버그 심볼 (Git 제외)
 ```
 
-각 소스 파일의 내용은 그대로 유지하며, 컴파일 결과물은 Git에서 제외합니다.
+## 학습 문서
 
----
+- [C 언어 핵심 정리](fundamentals/c_language.md)
+- [Day 01~09 포인터 정리](fundamentals/cp/POINTER_STUDY_DAY01_DAY09.md)
+- [자료구조 구현 목록](algorithms/data_structures/README.md)
+- [과제 안내](exercises/homework/README.md)
 
-# 1. 포인터 (Pointer)
+설명 문서는 관련 소스 폴더에 둡니다. 루트의 README는 전체 구조와 실행 방법을 안내합니다.
 
-- 변수의 **주소(Address)** 를 저장하는 변수
-- `*` : 포인터 선언 / 역참조(Dereference)
-- `&` : 변수의 주소를 가져옴
+## 빌드와 실행
 
-```c
-int a = 10;
+저장소 루트에서 실행합니다. 각 예제는 독립 프로그램이므로 전체 소스를 한꺼번에 링크하지 않습니다.
 
-int *p = &a;
-
-printf("%d\n", *p); // 10
+```sh
+make help
+make test-run        # C 정렬 정책 예제
+make sort-cpp-run    # C++ 정렬 정책 예제
+make sort-owned-run  # 스마트 포인터를 사용하는 C++ 예제
+make graph-run       # 그래프 예제
+make bit-run         # 비트 연산 예제
+make hw-run          # hw9 과제
+make driver-run      # 가상 장치 드라이버
 ```
 
----
-
-# 2. 배열 (Array)
-
-- 같은 자료형을 연속된 메모리에 저장
-- 배열 이름은 첫 번째 요소의 주소
-
-```c
-int arr[3] = {1,2,3};
-
-arr == &arr[0]
-```
-
----
-
-# 3. 문자열 (String)
-
-- 문자열은 `char` 배열
-- 마지막에는 반드시 `'\0'`(Null 문자)가 존재
-
-```c
-char str[] = "Hello";
-```
-
-메모리
-
-```
-H e l l o \0
-```
-
----
-
-# 4. 구조체 (Struct)
-
-- 서로 다른 자료형을 하나로 묶는 사용자 정의 자료형
-
-```c
-struct Person
-{
-    char name[20];
-    int age;
-};
-```
-
----
-
-# 5. enum
-
-- 관련된 상수들을 하나로 묶는 자료형
-- 상태(State)를 표현할 때 많이 사용
-
-```c
-enum State
-{
-    STOP,
-    RUN,
-    ERROR
-};
-```
-
----
-
-# 6. typedef
-
-- 기존 자료형에 **별명(Alias)** 을 붙이는 키워드
-
-```c
-typedef unsigned int uint;
-
-uint number = 10;
-```
-
-구조체에서 가장 많이 사용
-
-```c
-typedef struct
-{
-    char name[20];
-    int age;
-} Person;
-```
-
----
-
-# 7. 함수 포인터 (Function Pointer)
-
-- 함수의 주소를 저장하는 포인터
-
-```c
-void hello()
-{
-    printf("Hello\n");
-}
-
-void (*fp)(void);
-
-fp = hello;
-
-fp();
-```
-
-주요 사용처
-
-- Callback
-- Linux Driver
-- file_operations
-
----
-
-# 8. 비트 연산 (Bit Operation)
-
-```c
-&
-```
-
-AND
-
-```c
-|
-```
-
-OR
-
-```c
-^
-```
-
-XOR
-
-```c
-~
-```
-
-NOT
-
-```c
-<<
-```
-
-Left Shift
-
-```c
->>
-```
-
-Right Shift
-
-주요 사용
-
-- GPIO
-- Register
-- Embedded Programming
-
----
-
-# 9. static
-
-특징
-
-- 프로그램 종료까지 메모리 유지
-- 함수 내부에서도 값 유지
-- 전역 변수의 접근 범위를 파일 내부로 제한 가능
-
-```c
-void func()
-{
-    static int count = 0;
-
-    count++;
-
-    printf("%d\n", count);
-}
-```
-
-출력
-
-```
-1
-2
-3
-```
-
----
-
-# 10. const
-
-- 값을 변경할 수 없는 상수
-
-```c
-const int num = 10;
-```
-
----
-
-# 11. volatile
-
-의미
-
-> 이 변수는 프로그램 외부(인터럽트, 하드웨어 등)에서 값이 변경될 수 있으므로 컴파일러가 최적화하지 말고 항상 메모리에서 다시 읽어라.
-
-대표 사용
-
-- Interrupt
-- GPIO Register
-- Hardware Register
-- DMA
-
-```c
-volatile int button_pressed = 0;
-```
-
----
-
-# 메모리 구조
-
-```
-높은 주소
-
-+----------------------+
-|        Stack         |
-+----------------------+
-|                      |
-|        Heap          |
-+----------------------+
-|         BSS          |
-+----------------------+
-|        Data          |
-+----------------------+
-|        Text          |
-+----------------------+
-
-낮은 주소
-```
-
----
-
-## 1. Stack
-
-- 함수 호출
-- 지역 변수(Local Variable)
-- 매개변수(Parameter)
-- 자동 생성 / 자동 삭제
-- LIFO(Last In First Out)
-
-```c
-void func()
-{
-    int a = 10;
-}
-```
-
----
-
-## 2. Heap
-
-- 동적 메모리 영역
-- malloc()
-- calloc()
-- realloc()
-- free()
-- 개발자가 직접 관리
-
-```c
-int *p = malloc(sizeof(int));
-```
-
----
-
-## 3. Data
-
-- 초기화된 전역 변수
-- 초기화된 static 변수
-
-```c
-int num = 10;
-```
-
----
-
-## 4. BSS
-
-- 초기화하지 않은 전역 변수
-- 초기화하지 않은 static 변수
-- 자동으로 0 초기화
-
-```c
-int count;
-
-static int value;
-```
-
----
-
-## 5. Text
-
-- 프로그램 코드 저장
-- 함수 코드 저장
-- Read Only
-
-```c
-main()
-
-printf()
-
-hello()
-```
-
----
-
-# 동적 메모리
-
-## malloc()
-
-Heap에 원하는 크기의 메모리를 할당
-
-```c
-int *p = malloc(sizeof(int));
-```
-
----
-
-## calloc()
-
-Heap 메모리를 생성하고 **0으로 초기화**
-
-```c
-int *p = calloc(10, sizeof(int));
-```
-
----
-
-## realloc()
-
-이미 할당된 Heap 메모리의 크기를 변경
-
-```c
-p = realloc(p, 20 * sizeof(int));
-```
-
----
-
-## free()
-
-Heap 메모리를 운영체제에 반납
-
-```c
-free(p);
-```
-
----
-
-# Stack vs Heap
-
-| Stack | Heap |
-|--------|------|
-| 자동 관리 | 개발자가 직접 관리 |
-| 함수 종료 시 자동 삭제 | free() 필요 |
-| 빠름 | Stack보다 느림 |
-| 지역 변수 저장 | 동적 메모리 저장 |
-
----
-
-# 면접 핵심 키워드
-
-- Pointer
-- Struct
-- typedef
-- Function Pointer
-- static
-- const
-- volatile
-- malloc / calloc / realloc / free
-- Stack vs Heap
-- Data / BSS / Text
-
-```
-hangyeonghyeon@hangyeonghyeons-MacBook-Pro-3 c_study %    gcc \
-                -Wall \
-                -Wextra \
-                userspace/test_led.c  
-                -o test_led
-```
+실행 파일은 `build/<대상 이름>`에 생성합니다. `make clean`은 Makefile이 만드는 실행 파일을 정리합니다. C++ 예제에는 C++14 이상을 사용합니다.
+
+일부 예제는 작성 중이라 단독 빌드가 실패할 수 있습니다. 정리 전부터 `dll`, `sq`, `pq`에는 선언·반환형 오류가 있습니다. `hw`는 실제 존재하는 `hw9.c`를 빌드하도록 연결했습니다.
+
+일부 문제 풀이는 `sandbox/data.txt`를 입력으로 사용합니다. 이 파일은 문제마다 내용이 다른 로컬 작업용 데이터이며, 기존처럼 Git에서 제외합니다. 예제에서 요구하는 다른 `.txt` 입력 파일도 별도로 준비해야 합니다.
+
+## 기존 위치 찾기
+
+| 이전 위치 | 현재 위치 |
+|---|---|
+| `acadamy/{c100,cp,deep,malloc,bit}/` | `fundamentals/` 아래 같은 이름의 폴더 |
+| `acadamy/{jungol,problem}/` | `exercises/` 아래 같은 이름의 폴더 |
+| `book/`, `homework/`, `testcase/` | `exercises/` 아래 같은 이름의 폴더 |
+| `bit/` | `fundamentals/bit/` |
+| `algorithms/struct/` | `algorithms/data_structures/` |
+| `algorithms/Graph/` | `algorithms/graphs/` |
+| `algorithms/Conquer/` | `algorithms/divide_and_conquer/` |
+| `algorithms/backtraking/`, `algorithms/greed/`, `algorithms/hashtable/` | `algorithms/backtracking/`, `algorithms/greedy/`, `algorithms/hash_table/` |
+| `search/binary_search.c` | `algorithms/search/binary_search_basic.c` |
+| `design_pattern/` | `design_patterns/` |
+| 루트 `test.c` | `design_patterns/sort_strategy/c/main.c` |
+| 루트 `test.cpp`, 정렬 관련 `.cpp`·`.h` | `design_patterns/sort_strategy/cpp/` |
+| 루트 `test2.cpp` | `design_patterns/sort_strategy/cpp_owned/main.cpp` |
+| 루트 `device_driver.c` | `systems/device_driver/device_driver.c` |
+| 루트 `data_struct.md` | `algorithms/data_structures/README.md` |
+| 루트 `data.txt` | `sandbox/data.txt` |
+| `sandbox/utill.h` | `fundamentals/bit/util.h` |
+| 루트 `test`, `test2`, `test.dSYM/` | `build/legacy/` (기존 결과물 보관) |

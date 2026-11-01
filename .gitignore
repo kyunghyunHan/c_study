@@ -12,3 +12,7 @@ video.mov
 /sandbox/test
 /systems/kernel/kernel
 /systems/kernel201/kernel
+
+# 빌드 결과와 디버그 심볼
+/build/
+*.dSYM/

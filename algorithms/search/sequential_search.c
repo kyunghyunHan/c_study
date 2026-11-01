@@ -1,4 +1,4 @@
-#include "../struct/linked_list.h"
+#include "../data_structures/linked_list.h"
 /*
 gcc -Wall -Wextra \
   ./search/sequential_search.c \

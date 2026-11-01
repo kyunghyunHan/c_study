@@ -1,86 +1,103 @@
 CC := gcc
 CFLAGS := -std=c11 -Wall -Wextra -Wpedantic
-TARGET := test
+CXX := c++
+CXXFLAGS := -std=c++14 -Wall -Wextra -Wpedantic
+BUILD_DIR ?= build
+TARGET = $(BUILD_DIR)/$(patsubst %-run,%,$@)
 
 .DEFAULT_GOAL := test
 
-BUILD_TARGETS := \
+C_BUILD_TARGETS := \
 	test \
 	sll dll cll \
 	sq cq \
 	heap rbt pq sht \
 	greed conq prob \
 	hw tc ssn day jungol dfs \
-	graph topolo mst dijkstra bit
+	graph topolo mst dijkstra bit driver
 
+CPP_BUILD_TARGETS := sort-cpp sort-owned
+BUILD_TARGETS := $(C_BUILD_TARGETS) $(CPP_BUILD_TARGETS)
 RUN_TARGETS := $(addsuffix -run,$(BUILD_TARGETS))
 
 .PHONY: $(BUILD_TARGETS) $(RUN_TARGETS) clean help
 
 # 기본 테스트
-test: SOURCES := test.c
+test: SOURCES := design_patterns/sort_strategy/c/main.c
 
 # 연결 리스트
-sll: SOURCES := acadamy/cp/02_SLL_main.c acadamy/cp/02_SLL.c
-dll: SOURCES := acadamy/cp/02_dll_main.c acadamy/cp/02_dll.c
-cll: SOURCES := acadamy/cp/02_cll_main.c acadamy/cp/02_cll.c
+sll: SOURCES := fundamentals/cp/02_SLL_main.c fundamentals/cp/02_SLL.c
+dll: SOURCES := fundamentals/cp/02_dll_main.c fundamentals/cp/02_dll.c
+cll: SOURCES := fundamentals/cp/02_cll_main.c fundamentals/cp/02_cll.c
 
 # 큐
-sq: SOURCES := acadamy/cp/03_queue_main.c acadamy/cp/03_queue.c
-cq: SOURCES := acadamy/cp/03_cq_main.c acadamy/cp/03_cq.c
+sq: SOURCES := fundamentals/cp/03_queue_main.c fundamentals/cp/03_queue.c
+cq: SOURCES := fundamentals/cp/03_cq_main.c fundamentals/cp/03_cq.c
 
 # 자료구조
-heap: SOURCES := algorithms/struct/heap.c algorithms/struct/test_heap.c
-rbt: SOURCES := algorithms/struct/rbt.c algorithms/struct/test_rbt.c
-pq: SOURCES := algorithms/struct/priority_queue.c algorithms/struct/test_priority_queue.c
-sht: SOURCES := algorithms/struct/simple_hash_table.c algorithms/struct/test_simple_hash_table.c
+heap: SOURCES := algorithms/data_structures/heap.c algorithms/data_structures/test_heap.c
+rbt: SOURCES := algorithms/data_structures/rbt.c algorithms/data_structures/test_rbt.c
+pq: SOURCES := algorithms/data_structures/priority_queue.c algorithms/data_structures/test_priority_queue.c
+sht: SOURCES := algorithms/data_structures/simple_hash_table.c algorithms/data_structures/test_simple_hash_table.c
 
 # 알고리즘 연습
-greed: SOURCES := algorithms/greed/exam01.c
-conq: SOURCES := algorithms/Conquer/exam01.c
-prob: SOURCES := acadamy/problem/a26.c
-ssn: SOURCES := algorithms/search/sequential_search.c algorithms/struct/linked_list.c
+greed: SOURCES := algorithms/greedy/exam01.c
+conq: SOURCES := algorithms/divide_and_conquer/exam01.c
+prob: SOURCES := exercises/problem/a26.c
+ssn: SOURCES := algorithms/search/sequential_search.c algorithms/data_structures/linked_list.c
 dfs: SOURCES := algorithms/dfs/exam01.c
 
 # 과제 및 문제 풀이
-hw: SOURCES := homework/hw10.c
-tc: SOURCES := testcase/test05.c
-day: SOURCES := acadamy/cp/05_st_main.c
-jungol: SOURCES := acadamy/jungol/p2459.c
+hw: SOURCES := exercises/homework/hw9.c
+tc: SOURCES := exercises/testcase/test05.c
+day: SOURCES := fundamentals/cp/05_st_main.c
+jungol: SOURCES := exercises/jungol/p1661.c
 
 # 그래프
-graph: SOURCES := algorithms/Graph/test_graph.c algorithms/Graph/graph.c
+graph: SOURCES := algorithms/graphs/test_graph.c algorithms/graphs/graph.c
 topolo: SOURCES := \
-	algorithms/Graph/test_topological_sort.c \
-	algorithms/Graph/topological_sort.c \
-	algorithms/Graph/linked_list.c \
-	algorithms/Graph/graph.c
+	algorithms/graphs/test_topological_sort.c \
+	algorithms/graphs/topological_sort.c \
+	algorithms/graphs/linked_list.c \
+	algorithms/graphs/graph.c
 
 mst: SOURCES := \
-	algorithms/Graph/minimum_spanning_tree/test_mst.c \
-	algorithms/Graph/minimum_spanning_tree/mst.c \
-	algorithms/Graph/graph.c
+	algorithms/graphs/minimum_spanning_tree/test_mst.c \
+	algorithms/graphs/minimum_spanning_tree/mst.c \
+	algorithms/graphs/graph.c
 
 dijkstra: SOURCES := \
-	algorithms/Graph/shortest_path/test_dijkstra.c \
-	algorithms/Graph/shortest_path/dijkstra.c \
-	algorithms/Graph/graph.c
+	algorithms/graphs/shortest_path/test_dijkstra.c \
+	algorithms/graphs/shortest_path/dijkstra.c \
+	algorithms/graphs/graph.c
 
-#embedded
+# 비트 연산과 가상 장치 드라이버
 
-bit: SOURCES := bit/exam02.c
+bit: SOURCES := fundamentals/bit/exam02.c
 # 공통 빌드 및 실행 규칙
-$(BUILD_TARGETS):
+driver: SOURCES := systems/device_driver/device_driver.c
+
+# C++ 정렬 전략 예제
+sort-cpp: SOURCES := $(wildcard design_patterns/sort_strategy/cpp/*.cpp)
+sort-owned: SOURCES := design_patterns/sort_strategy/cpp_owned/main.cpp
+
+$(C_BUILD_TARGETS):
+	mkdir -p $(dir $(TARGET))
 	$(CC) $(CFLAGS) $(SOURCES) -o $(TARGET)
+
+$(CPP_BUILD_TARGETS):
+	mkdir -p $(dir $(TARGET))
+	$(CXX) $(CXXFLAGS) $(SOURCES) -o $(TARGET)
 
 $(RUN_TARGETS): %-run: %
 	./$(TARGET)
 
 clean:
-	rm -f $(TARGET)
+	$(RM) $(addprefix $(BUILD_DIR)/,$(BUILD_TARGETS))
 
 help:
 	@echo "빌드: make <이름>"
 	@echo "실행: make <이름>-run"
 	@echo "이름: $(BUILD_TARGETS)"
+	@echo "출력: $(BUILD_DIR)/<이름>"
 	@echo "정리: make clean"
